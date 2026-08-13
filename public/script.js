@@ -9,8 +9,33 @@
   var heroBg = hero.querySelector(".hero-bg");
   var objs = Array.prototype.slice.call(hero.querySelectorAll(".obj"));
   var logo = hero.querySelector(".logo");
-  var brandMark = hero.querySelector(".brand-mark");
+  var brandMark = document.querySelector(".brand-mark");
   var images = Array.prototype.slice.call(hero.querySelectorAll("img"));
+  if (brandMark) {
+    var brandMarkImg = brandMark.querySelector("img");
+    if (brandMarkImg) images.push(brandMarkImg);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Brand mark: click/tap scrolls back to the top of the homepage      */
+  /* ---------------------------------------------------------------- */
+
+  if (brandMark) {
+    var scrollToTop = function () {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: reducedMotion ? "auto" : "smooth",
+      });
+    };
+    brandMark.addEventListener("click", scrollToTop);
+    brandMark.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        scrollToTop();
+      }
+    });
+  }
 
   var STAGGER_MS = 120;
   var OBJECT_DURATION_MS = 1100;

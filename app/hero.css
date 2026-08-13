@@ -41,20 +41,28 @@
 /* -------------------------------------------------------------------- */
 
 .brand-mark {
-  position: absolute;
+  position: fixed;
   left: 1%;
   top: 1%;
   width: 6.5%;
   min-width: 40px;
   max-width: 50px;
-  z-index: 11;
-  pointer-events: none;
+  z-index: 1000;
+  pointer-events: auto;
+  cursor: pointer;
   opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 50%;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.25s ease, transform 0.25s ease;
   will-change: opacity;
 }
 .brand-mark.enter {
   opacity: 1;
+}
+.brand-mark:hover {
+  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));
+  transform: scale(1.05);
 }
 .brand-mark img {
   display: block;

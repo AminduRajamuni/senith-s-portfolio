@@ -49,16 +49,21 @@ function jd(seconds: number): CSSProperties {
 export default function Home() {
   return (
     <>
+      <div
+        className="brand-mark"
+        role="button"
+        tabIndex={0}
+        aria-label="Scroll to top"
+      >
+        <img src="/assets/kusal.png" alt="" draggable={false} />
+      </div>
+
       <section
         id="hero"
         className="hero"
         aria-label="Kusal Senith — Motion and Visual Design portfolio"
       >
         <div className="hero-bg" aria-hidden="true" />
-
-        <div className="brand-mark" aria-hidden="true">
-          <img src="/assets/kusal.png" alt="" draggable={false} />
-        </div>
 
         <h1 className="sr-only">Kusal Senith — Motion and Visual Design</h1>
 
