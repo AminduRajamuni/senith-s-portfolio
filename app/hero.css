@@ -37,6 +37,32 @@
 }
 
 /* -------------------------------------------------------------------- */
+/* Brand mark — small "K" corner logo                                    */
+/* -------------------------------------------------------------------- */
+
+.brand-mark {
+  position: absolute;
+  left: 1%;
+  top: 1%;
+  width: 6.5%;
+  min-width: 40px;
+  max-width: 50px;
+  z-index: 11;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity;
+}
+.brand-mark.enter {
+  opacity: 1;
+}
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* -------------------------------------------------------------------- */
 /* Objects — shared layers                                               */
 /* -------------------------------------------------------------------- */
 
@@ -267,6 +293,9 @@
     transform: translate(-50%, -50%) scale(1) !important;
     transition: opacity 0.4s ease !important;
   }
+  .brand-mark {
+    transition: opacity 0.4s ease !important;
+  }
 }
 
 /* -------------------------------------------------------------------- */
@@ -283,6 +312,10 @@
 }
 .no-js .logo {
   transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition: none;
+}
+.no-js .brand-mark {
   opacity: 1;
   transition: none;
 }

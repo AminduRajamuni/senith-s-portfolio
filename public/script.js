@@ -9,6 +9,7 @@
   var heroBg = hero.querySelector(".hero-bg");
   var objs = Array.prototype.slice.call(hero.querySelectorAll(".obj"));
   var logo = hero.querySelector(".logo");
+  var brandMark = hero.querySelector(".brand-mark");
   var images = Array.prototype.slice.call(hero.querySelectorAll("img"));
 
   var STAGGER_MS = 120;
@@ -76,6 +77,7 @@
   function runIntro() {
     if (reducedMotion) {
       heroBg.classList.add("enter");
+      if (brandMark) brandMark.classList.add("enter");
       objs.forEach(function (obj) {
         obj.classList.add("enter");
       });
@@ -85,6 +87,7 @@
     }
 
     heroBg.classList.add("enter");
+    if (brandMark) brandMark.classList.add("enter");
 
     objs.forEach(function (obj, i) {
       setTimeout(function () {
