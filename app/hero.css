@@ -1,0 +1,340 @@
+/* ==========================================================================
+   Homepage hero — desk-flatlay composition with entrance choreography,
+   idle float, mouse parallax and hover lift.
+
+   Structure per animated object (see script.js):
+     .obj        -> absolute position (left/top/width) + parallax translate
+       .obj-idle -> idle float translate
+         .obj-art -> resting rotation + hover scale/lift/rotation (+ <img>)
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  background: #0b0a09;
+  isolation: isolate;
+}
+
+/* -------------------------------------------------------------------- */
+/* Background                                                            */
+/* -------------------------------------------------------------------- */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("/assets/background.jpg");
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.hero-bg.enter {
+  transform: scale(1);
+}
+
+/* -------------------------------------------------------------------- */
+/* Objects — shared layers                                               */
+/* -------------------------------------------------------------------- */
+
+.obj {
+  position: absolute;
+  transform: translate(var(--from-x), var(--from-y));
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.obj.enter {
+  transform: translate(0, 0);
+}
+
+.obj-idle {
+  will-change: transform;
+}
+
+.obj-art {
+  position: relative;
+  display: block;
+  transform-origin: center;
+  transform: rotate(var(--from-rot));
+  opacity: 1;
+  will-change: transform, filter, opacity;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  clip-path: inset(var(--clip));
+}
+.obj.enter .obj-art {
+  transform: rotate(var(--rot));
+}
+
+.obj-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------------- */
+/* Per-object placement, resting rotation, entrance origin, tuning       */
+/* -------------------------------------------------------------------- */
+
+.obj--camera {
+  /* left/top/width are compensated for camera.png's transparent margin
+     (the alpha bbox is ~49% of the canvas) so the VISIBLE artwork lands
+     at the screenshot's left:10% top:-2% width:26%. */
+  left: -3.5%;
+  top: -30%;
+  width: 52.6%;
+  --rot: 0deg;
+  --from-x: 0px;
+  --from-y: -42vh;
+  --from-rot: calc(var(--rot) - 8deg);
+  --clip: 24.9% 21.2% 30.2% 29.4%;
+  --float-dur: 6.4s;
+  --float-amp: 5px;
+  --parallax: 13px;
+  z-index: 2;
+}
+
+.obj--keyboard {
+  left: 58%;
+  top: -23%;
+  width: 38%;
+  --rot: 0deg;
+  --from-x: 22vw;
+  --from-y: -38vh;
+  --from-rot: calc(var(--rot) - 8deg);
+  --clip: 24.2% 10.7% 24.4% 10.5%;
+  --float-dur: 7.3s;
+  --float-amp: 4px;
+  --parallax: 13px;
+  z-index: 3;
+}
+
+.obj--mic {
+  /* compensated for mic.png's large diagonal margin (~59% of canvas).
+     rot measured directly off the reference: the capsule sits nearly
+     horizontal, tilted only slightly down toward the grille. */
+  left: -16%;
+  top: 44%;
+  width: 46.8%;
+  --rot: 0deg;
+  --from-x: -42vw;
+  --from-y: 0px;
+  --from-rot: calc(var(--rot) - 8deg);
+  --clip: 32.5% 34.2% 9.7% 25.2%;
+  --float-dur: 8.6s;
+  --float-amp: 6px;
+  --parallax: 8px;
+  z-index: 4;
+}
+
+.obj--notebook {
+  left: 65%;
+  top: 63%;
+  width: 32%;
+  --rot: 0deg;
+  --from-x: 28vw;
+  --from-y: 38vh;
+  --from-rot: calc(var(--rot) - 8deg);
+  --clip: 16.5% 8.9% 14.4% 8.2%;
+  --float-dur: 7.9s;
+  --float-amp: 5px;
+  --parallax: 11px;
+  z-index: 5;
+}
+
+.obj--sunglasses {
+  /* compensated for sunglass.png's ~39% top / ~21-32% side margins */
+  left: 29%;
+  top: 68%;
+  width: 29.4%;
+  --rot: 0deg;
+  --from-x: 0px;
+  --from-y: 32vh;
+  --from-rot: calc(var(--rot) - 8deg);
+  --clip: 39.2% 17.7% 31.8% 21%;
+  --float-dur: 6.9s;
+  --float-amp: 4px;
+  --parallax: 6px;
+  z-index: 6;
+}
+
+/* -------------------------------------------------------------------- */
+/* Logo                                                                   */
+/* -------------------------------------------------------------------- */
+
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44%;
+  z-index: 10;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.92);
+  opacity: 0;
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+.logo.enter {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* -------------------------------------------------------------------- */
+/* Idle float (post-intro only)                                          */
+/* -------------------------------------------------------------------- */
+
+@keyframes idle-float {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(calc(var(--float-amp) * 0.35), calc(var(--float-amp) * -1), 0); }
+  50% { transform: translate3d(0, calc(var(--float-amp) * -0.55), 0); }
+  75% { transform: translate3d(calc(var(--float-amp) * -0.35), calc(var(--float-amp) * -0.15), 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero.ready .obj-idle {
+    animation: idle-float var(--float-dur) ease-in-out infinite;
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* Hover (hover-capable + fine pointer + motion allowed only)            */
+/* -------------------------------------------------------------------- */
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .hero.ready .obj-art {
+    cursor: pointer;
+    transition:
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero.ready .obj-art:hover {
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: rotate(calc(var(--rot) + 1.5deg)) scale(1.06) translateY(-6px);
+    filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+  }
+
+  .hero.ready.dimming .obj:not(.hovered) .obj-art {
+    opacity: 0.75;
+  }
+
+  .hero.ready .obj.hovered {
+    z-index: 20;
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* Reduced motion — final position, simple fade only                     */
+/* -------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg {
+    transform: scale(1) !important;
+    transition: none !important;
+  }
+  .obj {
+    transform: translate(0, 0) !important;
+    opacity: 0;
+    transition: opacity 0.4s ease !important;
+  }
+  .obj.enter {
+    opacity: 1;
+  }
+  .obj-art {
+    transform: rotate(var(--rot)) !important;
+    transition: none !important;
+  }
+  .obj-idle {
+    animation: none !important;
+  }
+  .logo {
+    transform: translate(-50%, -50%) scale(1) !important;
+    transition: opacity 0.4s ease !important;
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* No-JS fallback — show everything in place rather than stuck off-screen */
+/* -------------------------------------------------------------------- */
+
+.no-js .obj {
+  transform: translate(0, 0);
+  transition: none;
+}
+.no-js .obj-art {
+  transform: rotate(var(--rot));
+  transition: none;
+}
+.no-js .logo {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition: none;
+}
+.no-js .hero-bg {
+  transform: scale(1);
+  transition: none;
+}
+
+/* -------------------------------------------------------------------- */
+/* Responsive                                                            */
+/* -------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .obj--keyboard,
+  .obj--sunglasses {
+    display: none;
+  }
+  .obj--camera {
+    left: -16%;
+    top: -27%;
+    width: 68.8%;
+  }
+  .obj--mic {
+    left: -16%;
+    top: 52.5%;
+    width: 64%;
+  }
+  .obj--notebook {
+    left: 56%;
+    top: 66%;
+    width: 42%;
+  }
+  .logo {
+    width: 80%;
+  }
+}
+
+@media (max-width: 600px) {
+  .obj--mic {
+    display: none;
+  }
+  .obj--camera {
+    left: -23%;
+    top: -12%;
+    width: 85%;
+  }
+  .obj--notebook {
+    left: 46%;
+    top: 68%;
+    width: 54%;
+  }
+  .logo {
+    width: 84%;
+  }
+}
