@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Side nav — fixed left-edge panel listing the 4 portfolio sections.
+   Auto-opens once, the first time the 3D showcase (#showcase) scrolls
+   into view, then auto-closes 2s later. From then on it only opens by
+   resting the pointer on the left edge of the screen (see
+   public/sidenav.js).
+   ========================================================================== */
+
+/* The panel never captures pointer events itself — it's a decorative
+   overlay that can visually sit above page content (like the showcase's
+   left arrow) without stealing clicks from it. Only the active item
+   (the one real link) opts back in below. Hover-to-reveal is driven by
+   cursor position in sidenav.js, not by hit-testing an element, for the
+   same reason. */
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  height: 100svh;
+  width: min(272px, 18vw);
+  min-width: 200px;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    100deg,
+    rgba(0, 0, 0, 0.67) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease-out;
+  will-change: transform, opacity;
+}
+.side-nav.open {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.side-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1vw, 15px);
+  list-style: none;
+  margin: 0;
+  padding: 0 20px 0 clamp(22px, 2.9vw, 44px);
+  width: 100%;
+}
+
+.side-nav-item {
+  display: block;
+  font-family: var(--font-space-grotesk), sans-serif;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: default;
+  color: #9dc3a3;
+  opacity: 0.42;
+  font-weight: 500;
+  font-size: clamp(13px, 1.05vw, 17px);
+  letter-spacing: 0.01em;
+  transition: opacity 0.3s ease;
+}
+.side-nav-item.active {
+  opacity: 1;
+  font-weight: 700;
+  font-size: clamp(21px, 2vw, 34px);
+}
+button.side-nav-item {
+  cursor: pointer;
+  pointer-events: auto;
+}
+@media (hover: hover) and (pointer: fine) {
+  button.side-nav-item:not(.active):hover {
+    opacity: 0.65;
+  }
+}
+button.side-nav-item:focus-visible {
+  outline: 2px solid #9dc3a3;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .side-nav {
+    transition: none !important;
+  }
+}
+
+.no-js .side-nav {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .side-nav {
+    width: min(72vw, 240px);
+  }
+}

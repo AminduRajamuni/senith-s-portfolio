@@ -3,6 +3,8 @@ import type { CSSProperties } from "react";
 import Script from "next/script";
 import "./hero.css";
 import "./page2.css";
+import "./page3.css";
+import "./sidenav.css";
 
 export const metadata: Metadata = {
   title: "Kusal Senith — Motion and Visual Design",
@@ -33,6 +35,33 @@ const WHAT_I_DO = [
   "Visual Effects ( VFX )",
 ];
 
+const MODELS = [
+  {
+    key: "robot",
+    label: "Robot Model",
+    images: [
+      "/assets/page3(3D)/Robot (4).png",
+      "/assets/page3(3D)/Robot (5).png",
+      "/assets/page3(3D)/Robot (6).png",
+    ],
+  },
+  {
+    key: "bedroom",
+    label: "Bedroom Model",
+    images: [
+      "/assets/page3(3D)/BedRoom.jpg",
+      "/assets/page3(3D)/BedRoom (3).png",
+    ],
+  },
+];
+
+const SIDE_NAV_ITEMS = [
+  { key: "3d-works", label: "3D Works", target: "showcase" },
+  { key: "motion-graphics", label: "Motion Graphics", target: null },
+  { key: "reel-creations", label: "Reel Creations", target: null },
+  { key: "graphic-designs", label: "Graphic Designs", target: null },
+];
+
 const TOOLS = [
   { key: "ai", src: "/assets/page2/tools_icons/ai.png", alt: "Adobe Illustrator" },
   { key: "ae", src: "/assets/page2/tools_icons/ae.png", alt: "Adobe After Effects" },
@@ -57,6 +86,29 @@ export default function Home() {
       >
         <img src="/assets/kusal.png" alt="" draggable={false} />
       </div>
+
+      <nav id="side-nav" className="side-nav" aria-label="Portfolio sections">
+        <ul className="side-nav-list">
+          {SIDE_NAV_ITEMS.map((item) =>
+            item.target ? (
+              <li key={item.key}>
+                <button
+                  type="button"
+                  className="side-nav-item active"
+                  data-target={item.target}
+                  aria-current="page"
+                >
+                  {item.label}
+                </button>
+              </li>
+            ) : (
+              <li key={item.key}>
+                <span className="side-nav-item">{item.label}</span>
+              </li>
+            )
+          )}
+        </ul>
+      </nav>
 
       <section
         id="hero"
@@ -190,8 +242,81 @@ export default function Home() {
         </div>
       </section>
 
+      <section
+        id="showcase"
+        className="showcase"
+        aria-label="3D model showcase"
+      >
+        <div className="showcase-bg" aria-hidden="true" />
+
+        <div className="showcase-inner">
+          <div className="stage">
+            <div className="frame-wrap">
+              <button
+                type="button"
+                className="arrow-btn arrow-left"
+                data-dir="-1"
+                aria-label="Previous image"
+              >
+                <img
+                  src="/assets/page3(3D)/arrow.png"
+                  alt=""
+                  draggable={false}
+                />
+              </button>
+
+              <div className="frame">
+                <img
+                  id="showcase-image"
+                  src={MODELS[0].images[0]}
+                  alt={`${MODELS[0].label} render`}
+                  draggable={false}
+                />
+              </div>
+
+              <button
+                type="button"
+                className="arrow-btn arrow-right"
+                data-dir="1"
+                aria-label="Next image"
+              >
+                <img
+                  src="/assets/page3(3D)/arrow.png"
+                  alt=""
+                  draggable={false}
+                />
+              </button>
+            </div>
+          </div>
+
+          <div className="model-switch" role="tablist" aria-label="Choose 3D model">
+            {MODELS.map((m, i) => (
+              <span key={m.key} className="model-switch-item">
+                <button
+                  type="button"
+                  className={`model-btn${i === 0 ? " active" : ""}`}
+                  data-model={m.key}
+                  data-images={JSON.stringify(m.images)}
+                  role="tab"
+                  aria-selected={i === 0}
+                >
+                  {m.label}
+                </button>
+                {i < MODELS.length - 1 ? (
+                  <span className="divider" aria-hidden="true">
+                    |
+                  </span>
+                ) : null}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Script src="/script.js" strategy="afterInteractive" />
       <Script src="/page2.js" strategy="afterInteractive" />
+      <Script src="/page3.js" strategy="afterInteractive" />
+      <Script src="/sidenav.js" strategy="afterInteractive" />
     </>
   );
 }
