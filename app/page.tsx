@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import Script from "next/script";
 import "./hero.css";
 import "./page2.css";
@@ -344,7 +345,11 @@ export default async function Home() {
           ) : (
             <div className="motion-grid">
               {folders.map((folder) => (
-                <div className="motion-folder" key={folder.path}>
+                <Link
+                  href={`/motion-graphics/${encodeURIComponent(folder.name)}`}
+                  className="motion-folder"
+                  key={folder.path}
+                >
                   <img
                     className="motion-folder-icon"
                     src="/assets/motionPage/MacFolder.png"
@@ -352,7 +357,7 @@ export default async function Home() {
                     draggable={false}
                   />
                   <span className="motion-folder-title">{folder.name}</span>
-                </div>
+                </Link>
               ))}
             </div>
           )}

@@ -1,0 +1,409 @@
+/* ==========================================================================
+   Motion Graphics folder page — a separate, self-contained route (not part
+   of the homepage's scroll sequence) styled like a macOS Finder window:
+   traffic-light toolbar, item grid on the same background/positioning as
+   the homepage's Motion Graphics section, status bar, and a full-screen
+   "reel" player for individual videos.
+   ========================================================================== */
+
+.mac-page {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  background: #f2f1ee;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "SF Pro Display",
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+/* -------------------------------------------------------------------- */
+/* Toolbar — traffic lights, back button, folder title                   */
+/* -------------------------------------------------------------------- */
+
+.mac-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 52px;
+  padding: 0 18px;
+  background: rgba(246, 246, 244, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+.mac-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.mac-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.15);
+}
+.mac-dot-red {
+  background: #ff5f57;
+}
+.mac-dot-yellow {
+  background: #febc2e;
+}
+.mac-dot-green {
+  background: #28c840;
+}
+
+.mac-back {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+  padding: 6px 12px 6px 8px;
+  border-radius: 999px;
+  color: #1d1d1f;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.mac-back:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+.mac-back svg {
+  flex: 0 0 auto;
+}
+
+.mac-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1d1d1f;
+  text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Balances the traffic-lights + back button on the left so .mac-title is
+   optically centered in the toolbar rather than centered minus that width. */
+.mac-toolbar-spacer {
+  flex: 0 0 auto;
+  width: 132px;
+}
+
+/* -------------------------------------------------------------------- */
+/* Content — reuses .motion-inner / .motion-grid from motion.css so the    */
+/* items line up exactly like the folders do on the homepage.              */
+/* -------------------------------------------------------------------- */
+
+.mac-content {
+  min-height: 100svh;
+  padding-top: calc(52px + clamp(40px, 6vw, 96px));
+  padding-bottom: calc(28px + clamp(40px, 6vw, 96px));
+  box-sizing: border-box;
+}
+
+.mac-statusbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  background: rgba(246, 246, 244, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  color: rgba(29, 29, 31, 0.55);
+  font-size: 11.5px;
+}
+
+/* -------------------------------------------------------------------- */
+/* Video tiles — same icon/label slot as folder tiles, with a thumbnail    */
+/* frame + hover play badge instead of the folder glyph.                   */
+/* -------------------------------------------------------------------- */
+
+.video-tile-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 10px 18px rgba(20, 20, 30, 0.22);
+}
+.video-tile-icon {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  filter: none;
+}
+.video-tile-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.video-tile:hover .video-tile-play,
+.video-tile:focus-visible .video-tile-play {
+  opacity: 1;
+}
+.video-tile:focus-visible {
+  outline: 2px solid #0a84ff;
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+/* ==========================================================================
+   Reel player — full-screen overlay with blurred backdrop, a full-height
+   vertical video, transport controls, and title/description alongside it.
+   ========================================================================== */
+
+.player-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 8, 10, 0.62);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+}
+
+.player-close,
+.player-nav {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.player-close:hover,
+.player-nav:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+.player-close:active,
+.player-nav:active {
+  transform: scale(0.94);
+}
+
+.player-close {
+  top: 20px;
+  right: 24px;
+  width: 38px;
+  height: 38px;
+}
+
+.player-nav {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+}
+.player-nav:active {
+  transform: translateY(-50%) scale(0.94);
+}
+.player-nav-prev {
+  left: clamp(12px, 3vw, 40px);
+}
+.player-nav-next {
+  right: clamp(12px, 3vw, 40px);
+}
+
+.player-stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 4vw, 56px);
+  max-width: min(94vw, 1100px);
+  height: 100%;
+  padding: 56px 0;
+  box-sizing: border-box;
+}
+
+.player-video-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  height: 100%;
+  max-height: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+}
+
+.player-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.player-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 14px 14px;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.65));
+}
+
+.player-play {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+}
+.player-play:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.player-time {
+  flex: 0 0 auto;
+  min-width: 32px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.player-slider {
+  flex: 1 1 auto;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+}
+.player-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.player-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.player-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.player-details {
+  flex: 0 1 320px;
+  max-width: min(30vw, 340px);
+  max-height: 80%;
+  overflow-y: auto;
+  color: #fff;
+}
+.player-title {
+  margin: 0 0 10px;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 700;
+}
+.player-description {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: pre-wrap;
+}
+
+@media (max-width: 760px) {
+  .player-stage {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 72px 20px 24px;
+  }
+  .player-video-wrap {
+    height: auto;
+    width: min(100%, 360px);
+    max-height: 62svh;
+  }
+  .player-details {
+    max-width: 100%;
+    flex-basis: auto;
+  }
+  .player-nav {
+    top: auto;
+    bottom: 16px;
+  }
+  .player-nav-prev {
+    left: 20px;
+  }
+  .player-nav-next {
+    right: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player-close,
+  .player-nav,
+  .video-tile-play {
+    transition: none !important;
+  }
+}

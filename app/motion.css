@@ -58,6 +58,16 @@
   flex-direction: column;
   align-items: center;
   gap: 0px;
+  /* Reused as a <Link> for real folders and as a <button> for video tiles
+     inside a folder (see app/motion-graphics/) — reset either element's
+     native styling so it only ever looks like an icon-and-label tile. */
+  text-decoration: none;
+  color: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
 }
 
 .motion-folder-icon {
