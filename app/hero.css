@@ -47,6 +47,10 @@
   width: 6.5%;
   min-width: 40px;
   max-width: 50px;
+  /* Both logo images are square (see below); needed because they're now
+     absolutely positioned to crossfade in place, which takes them out of
+     normal flow — the mark would otherwise have no height to size by. */
+  aspect-ratio: 1 / 1;
   z-index: 1000;
   pointer-events: auto;
   cursor: pointer;
@@ -64,10 +68,35 @@
   filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));
   transform: scale(1.05);
 }
-.brand-mark img {
+
+/* The white mark reads fine over the dark hero/showcase backgrounds but
+   vanishes over the light about/motion-graphics ones, so a black twin is
+   layered underneath and crossfaded in — toggled by script.js based on
+   which section the viewport is currently centered on. */
+.brand-mark-white,
+.brand-mark-black {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  transition: opacity 0.5s ease;
+}
+.brand-mark-black {
+  opacity: 0;
+}
+.brand-mark.on-light .brand-mark-white {
+  opacity: 0;
+}
+.brand-mark.on-light .brand-mark-black {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark-white,
+  .brand-mark-black {
+    transition: none !important;
+  }
 }
 
 /* -------------------------------------------------------------------- */

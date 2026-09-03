@@ -1,0 +1,544 @@
+/* ==========================================================================
+   Admin — password gate + motion graphics dashboard. Same black flatlay
+   background as the homepage hero (/assets/background.jpg) and the same
+   Space Grotesk face used across the rest of the site, so it reads as part
+   of the portfolio rather than a bolted-on tool.
+   ========================================================================== */
+
+.admin-auth-shell,
+.admin-shell {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  background: #0b0a09;
+  font-family: var(--font-space-grotesk), sans-serif;
+  color: #f2ebe3;
+}
+
+.admin-auth-bg,
+.admin-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(180deg, rgba(9, 7, 6, 0.72), rgba(9, 7, 6, 0.86)),
+    url("/assets/background.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* -------------------------------------------------------------------- */
+/* Login — small, centered, minimal                                      */
+/* -------------------------------------------------------------------- */
+
+.admin-auth-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.admin-login-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 280px;
+  padding: 36px 28px 30px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(20, 16, 14, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  animation: admin-login-in 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes admin-login-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.admin-login-mark {
+  width: 34px;
+  height: auto;
+  opacity: 0.92;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+}
+
+.admin-login-input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #f2ebe3;
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  padding: 6px 4px 10px;
+  transition: border-color 0.25s ease;
+}
+.admin-login-input::placeholder {
+  color: rgba(242, 235, 227, 0.35);
+  letter-spacing: 0.3em;
+}
+.admin-login-input:focus {
+  outline: none;
+  border-bottom-color: #c0503a;
+}
+
+.admin-login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: #c0503a;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+.admin-login-submit:hover:not(:disabled) {
+  background: #d4633c;
+  transform: scale(1.06);
+}
+.admin-login-submit:active:not(:disabled) {
+  transform: scale(0.96);
+}
+.admin-login-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.admin-login-submit:focus-visible {
+  outline: 2px solid #c0503a;
+  outline-offset: 3px;
+}
+
+.admin-login-error {
+  margin: -4px 0 0;
+  font-size: 12.5px;
+  color: #e08a72;
+  text-align: center;
+  animation: admin-shake 0.45s ease;
+}
+
+@keyframes admin-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* Dashboard shell                                                        */
+/* -------------------------------------------------------------------- */
+
+.admin-panel {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) clamp(20px, 5vw, 40px) 80px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.admin-header h1 {
+  margin: 2px 0 0;
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.admin-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(242, 235, 227, 0.5);
+}
+
+.admin-back {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: rgba(242, 235, 227, 0.6);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.admin-back:hover {
+  color: #f2ebe3;
+}
+
+.admin-logout {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: rgba(242, 235, 227, 0.8);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.admin-logout:hover:not(:disabled) {
+  border-color: #c0503a;
+  color: #f2ebe3;
+  background: rgba(192, 80, 58, 0.12);
+}
+
+.admin-warning {
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(192, 80, 58, 0.35);
+  background: rgba(192, 80, 58, 0.1);
+  color: #f2ebe3;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.admin-empty {
+  font-size: 14px;
+  color: rgba(242, 235, 227, 0.55);
+  margin: 0 0 20px;
+}
+
+/* -------------------------------------------------------------------- */
+/* Folders                                                                */
+/* -------------------------------------------------------------------- */
+
+.admin-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.admin-folder-card {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.admin-folder-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.admin-folder-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 26px 14px 20px;
+  text-decoration: none;
+  color: inherit;
+}
+.admin-folder-icon {
+  font-size: 30px;
+}
+.admin-folder-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  text-align: center;
+  word-break: break-word;
+}
+
+.admin-folder-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(242, 235, 227, 0.7);
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.admin-folder-card:hover .admin-folder-delete {
+  opacity: 1;
+}
+.admin-folder-delete:hover:not(:disabled) {
+  background: #c0503a;
+  color: #fff;
+}
+.admin-folder-delete:focus-visible {
+  opacity: 1;
+  outline: 2px solid #c0503a;
+  outline-offset: 2px;
+}
+
+.admin-folder-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 96px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.22);
+  background: transparent;
+  border-radius: 16px;
+  color: rgba(242, 235, 227, 0.6);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.admin-folder-add span:first-child {
+  font-size: 22px;
+  line-height: 1;
+}
+.admin-folder-add:hover {
+  border-color: #c0503a;
+  color: #f2ebe3;
+}
+
+.admin-folder-new-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  justify-content: center;
+}
+.admin-folder-new-input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #f2ebe3;
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 4px 2px 8px;
+}
+.admin-folder-new-input:focus {
+  outline: none;
+  border-bottom-color: #c0503a;
+}
+.admin-folder-new-actions {
+  display: flex;
+  gap: 8px;
+}
+.admin-folder-new-actions button {
+  flex: 1;
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 0;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.admin-folder-new-actions button[type="submit"] {
+  background: #c0503a;
+  color: #fff;
+}
+.admin-folder-new-actions button[type="button"] {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(242, 235, 227, 0.8);
+}
+.admin-folder-new-error {
+  margin: 0;
+  font-size: 11.5px;
+  color: #e08a72;
+}
+
+/* -------------------------------------------------------------------- */
+/* Video upload form                                                     */
+/* -------------------------------------------------------------------- */
+
+.admin-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  margin-bottom: 28px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-upload-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-upload-file {
+  flex: 1;
+  min-width: 200px;
+  font-size: 12.5px;
+  color: rgba(242, 235, 227, 0.7);
+}
+.admin-upload-file::file-selector-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  margin-right: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f2ebe3;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.admin-upload-title,
+.admin-upload-description {
+  flex: 1;
+  min-width: 200px;
+  border: 0;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #f2ebe3;
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 6px 2px;
+  resize: vertical;
+}
+.admin-upload-title:focus,
+.admin-upload-description:focus {
+  outline: none;
+  border-bottom-color: #c0503a;
+}
+
+.admin-upload-actions {
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-upload-actions button {
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 20px;
+  background: #c0503a;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+.admin-upload-actions button:hover:not(:disabled) {
+  background: #d4633c;
+}
+.admin-upload-actions button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+.admin-upload-error {
+  margin: 0;
+  font-size: 12.5px;
+  color: #e08a72;
+}
+
+.admin-upload-bar {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+.admin-upload-bar-fill {
+  height: 100%;
+  background: #c0503a;
+  transition: width 0.2s ease;
+}
+
+/* -------------------------------------------------------------------- */
+/* Video list                                                            */
+/* -------------------------------------------------------------------- */
+
+.admin-video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.admin-video-card {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.admin-video-preview {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  object-fit: cover;
+}
+
+.admin-video-info {
+  padding: 12px 14px 6px;
+}
+.admin-video-title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.admin-video-description {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(242, 235, 227, 0.6);
+}
+
+.admin-video-delete {
+  width: calc(100% - 28px);
+  margin: 6px 14px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: rgba(242, 235, 227, 0.7);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 7px 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.admin-video-delete:hover:not(:disabled) {
+  border-color: #c0503a;
+  color: #f2ebe3;
+  background: rgba(192, 80, 58, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-login-card,
+  .admin-login-error {
+    animation: none !important;
+  }
+}

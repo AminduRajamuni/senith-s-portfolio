@@ -6,7 +6,12 @@
 .about {
   position: relative;
   width: 100%;
-  min-height: 100svh;
+  /* min-height and padding-bottom bumped by the same amount so the extra
+     space is always genuinely additive at the bottom — whether or not
+     the content (which is top-anchored, not centered) already happened
+     to exceed one viewport on its own. */
+  min-height: calc(100svh + clamp(96px, 9vw, 180px));
+  padding-bottom: clamp(96px, 9vw, 180px);
   overflow: hidden;
   background: #cfc3bd;
   font-family: var(--font-space-grotesk), sans-serif;

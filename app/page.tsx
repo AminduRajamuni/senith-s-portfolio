@@ -4,7 +4,9 @@ import Script from "next/script";
 import "./hero.css";
 import "./page2.css";
 import "./page3.css";
+import "./motion.css";
 import "./sidenav.css";
+import { listFolders, isCloudinaryConfigured } from "@/lib/cloudinary";
 
 export const metadata: Metadata = {
   title: "Kusal Senith — Motion and Visual Design",
@@ -57,7 +59,7 @@ const MODELS = [
 
 const SIDE_NAV_ITEMS = [
   { key: "3d-works", label: "3D Works", target: "showcase" },
-  { key: "motion-graphics", label: "Motion Graphics", target: null },
+  { key: "motion-graphics", label: "Motion Graphics", target: "motion-graphics" },
   { key: "reel-creations", label: "Reel Creations", target: null },
   { key: "graphic-designs", label: "Graphic Designs", target: null },
 ];
@@ -75,7 +77,9 @@ function jd(seconds: number): CSSProperties {
   return { "--jd": `${seconds}s` } as CSSProperties;
 }
 
-export default function Home() {
+export default async function Home() {
+  const folders = isCloudinaryConfigured() ? await listFolders() : [];
+
   return (
     <>
       <div
@@ -84,7 +88,18 @@ export default function Home() {
         tabIndex={0}
         aria-label="Scroll to top"
       >
-        <img src="/assets/kusal.png" alt="" draggable={false} />
+        <img
+          className="brand-mark-white"
+          src="/assets/kusal.png"
+          alt=""
+          draggable={false}
+        />
+        <img
+          className="brand-mark-black"
+          src="/assets/k-Black.png"
+          alt=""
+          draggable={false}
+        />
       </div>
 
       <nav id="side-nav" className="side-nav" aria-label="Portfolio sections">
@@ -94,9 +109,8 @@ export default function Home() {
               <li key={item.key}>
                 <button
                   type="button"
-                  className="side-nav-item active"
+                  className="side-nav-item"
                   data-target={item.target}
-                  aria-current="page"
                 >
                   {item.label}
                 </button>
@@ -310,6 +324,38 @@ export default function Home() {
               </span>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section
+        id="motion-graphics"
+        className="motion"
+        aria-label="Motion graphics"
+      >
+        <div className="motion-bg" aria-hidden="true" />
+
+        <div className="motion-inner">
+          {folders.length === 0 ? (
+            <p className="motion-empty">
+              {isCloudinaryConfigured()
+                ? "Motion graphics folders will show up here once added."
+                : "Motion graphics coming soon."}
+            </p>
+          ) : (
+            <div className="motion-grid">
+              {folders.map((folder) => (
+                <div className="motion-folder" key={folder.path}>
+                  <img
+                    className="motion-folder-icon"
+                    src="/assets/motionPage/MacFolder.png"
+                    alt=""
+                    draggable={false}
+                  />
+                  <span className="motion-folder-title">{folder.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

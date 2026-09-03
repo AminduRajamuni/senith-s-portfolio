@@ -6,8 +6,15 @@
 .showcase {
   position: relative;
   width: 100%;
-  height: 100svh;
-  min-height: 560px;
+  height: auto;
+  /* Content is vertically centered (align-items below), so simply bumping
+     min-height would split the extra space evenly above and below it.
+     Instead, min-height and padding-bottom are bumped by the same
+     amount: that keeps the centered content-box exactly one viewport
+     tall (unchanged composition) while the padding-bottom appends pure
+     extra space underneath it, outside the centered region. */
+  min-height: max(560px, calc(100svh + clamp(96px, 9vw, 180px)));
+  padding-bottom: clamp(96px, 9vw, 180px);
   overflow: hidden;
   background: #073d2f;
   font-family: var(--font-space-grotesk), sans-serif;

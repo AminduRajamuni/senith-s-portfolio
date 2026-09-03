@@ -1,0 +1,94 @@
+/* ==========================================================================
+   Motion Graphics (page 4) — folders managed from /admin/dashboard, shown
+   as Mac-style folder icons in a top-left-anchored grid: 3 columns, filling
+   row by row, on the light grid-paper background (motionBG.jpg) rather
+   than the dark tone used elsewhere on the site.
+   ========================================================================== */
+
+.motion {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #f2f1ee;
+}
+
+.motion-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("/assets/motionPage/motionBG.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Centers the folder grid as a whole block in the section — padding here
+   is what keeps it off the screen edges even when there are few folders,
+   rather than the grid itself being pinned to the top-left corner. */
+.motion-inner {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(40px, 6vw, 96px);
+}
+
+/* The div holding the folder slots. Within the centered block, folders
+   still fill row by row starting at its own top-left cell. */
+.motion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, clamp(120px, 10vw, 180px));
+  grid-auto-rows: auto;
+  /* Gaps deliberately wider than the icons themselves, to match the
+     spaced-out wireframe rather than a tightly packed grid. */
+  column-gap: clamp(90px, 13vw, 220px);
+  row-gap: clamp(80px, 11vw, 190px);
+  /* Without this, grid's default `align-items: stretch` forces every
+     folder tile to the row's track height, squeezing icon+title into
+     less space than they need — since the title has overflow:hidden,
+     that squeeze was clipping the text down to a sliver. Sizing each
+     tile to its own natural content avoids that entirely. */
+  align-items: start;
+}
+
+.motion-folder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+
+.motion-folder-icon {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 18px rgba(20, 20, 30, 0.18));
+}
+
+.motion-folder-title {
+  max-width: 100%;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "SF Pro Display",
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-weight: 600;
+  font-size: clamp(14px, 1.15vw, 16px);
+  color: #1d1d1f;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.motion-empty {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 14px;
+  color: rgba(29, 29, 31, 0.55);
+}

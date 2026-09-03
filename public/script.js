@@ -12,8 +12,9 @@
   var brandMark = document.querySelector(".brand-mark");
   var images = Array.prototype.slice.call(hero.querySelectorAll("img"));
   if (brandMark) {
-    var brandMarkImg = brandMark.querySelector("img");
-    if (brandMarkImg) images.push(brandMarkImg);
+    images = images.concat(
+      Array.prototype.slice.call(brandMark.querySelectorAll("img"))
+    );
   }
 
   /* ---------------------------------------------------------------- */
@@ -35,6 +36,50 @@
         scrollToTop();
       }
     });
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Brand mark theme: swap to the black logo (crossfading, see          */
+  /* hero.css) while the viewport is centered on a light-background       */
+  /* page (about, motion graphics) — the white mark disappears there.     */
+  /* Checking whichever section contains the viewport's vertical           */
+  /* midpoint, rather than a visibility-ratio threshold, means exactly     */
+  /* one section is ever "current" with no dead zones to tune.             */
+  /* ---------------------------------------------------------------- */
+
+  if (brandMark) {
+    var lightSections = ["about", "motion-graphics"]
+      .map(function (id) {
+        return document.getElementById(id);
+      })
+      .filter(Boolean);
+
+    if (lightSections.length) {
+      var updateBrandMarkTheme = function () {
+        var mid = window.innerHeight / 2;
+        var onLight = lightSections.some(function (section) {
+          var rect = section.getBoundingClientRect();
+          return rect.top <= mid && rect.bottom >= mid;
+        });
+        brandMark.classList.toggle("on-light", onLight);
+      };
+
+      var markTicking = false;
+      var queueBrandMarkCheck = function () {
+        if (markTicking) return;
+        markTicking = true;
+        window.requestAnimationFrame(function () {
+          markTicking = false;
+          updateBrandMarkTheme();
+        });
+      };
+
+      updateBrandMarkTheme();
+      window.addEventListener("scroll", queueBrandMarkCheck, {
+        passive: true,
+      });
+      window.addEventListener("resize", queueBrandMarkCheck);
+    }
   }
 
   var STAGGER_MS = 120;

@@ -116,17 +116,75 @@
     });
   }
 
-  /* The active item scrolls back to its section; the rest have no
+  /* Linked items scroll to their section on click; the rest have no
      destination yet, so they're rendered as inert labels (see page.tsx). */
   var items = Array.prototype.slice.call(
     nav.querySelectorAll("button.side-nav-item")
   );
+  var linkedItems = [];
   items.forEach(function (btn) {
     var targetId = btn.getAttribute("data-target");
     if (!targetId) return;
+    var section = document.getElementById(targetId);
+    if (section) linkedItems.push({ btn: btn, section: section });
     btn.addEventListener("click", function () {
-      var target = document.getElementById(targetId);
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
+
+  /* ---------------------------------------------------------------- */
+  /* Active-item highlighting: bold whichever linked item's section        */
+  /* currently fills at least ACTIVE_RATIO of the viewport's height — not   */
+  /* a pixel-exact 100% match, which was too strict to ever trigger once     */
+  /* sub-pixel rounding or a non-100vh section was involved. Picks the       */
+  /* section with the most visible coverage, so only one is ever active.     */
+  /* Re-evaluated on every scroll/resize tick so it swaps the instant one     */
+  /* section's place is taken by the next, in either direction.               */
+  /* ---------------------------------------------------------------- */
+
+  if (linkedItems.length) {
+    var ACTIVE_RATIO = 0.9;
+
+    function updateActiveItem() {
+      var current = null;
+      var bestRatio = ACTIVE_RATIO;
+      for (var i = 0; i < linkedItems.length; i++) {
+        var rect = linkedItems[i].section.getBoundingClientRect();
+        var visible =
+          Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+        var ratio = visible / window.innerHeight;
+        if (ratio >= bestRatio) {
+          current = linkedItems[i];
+          bestRatio = ratio;
+        }
+      }
+      linkedItems.forEach(function (item) {
+        var isActive = item === current;
+        item.btn.classList.toggle("active", isActive);
+        if (isActive) item.btn.setAttribute("aria-current", "page");
+        else item.btn.removeAttribute("aria-current");
+      });
+
+      // Motion Graphics sits on a light background — the mint-green text
+      // needs to go dark there and back to normal everywhere else.
+      nav.classList.toggle(
+        "on-light",
+        !!current && current.btn.getAttribute("data-target") === "motion-graphics"
+      );
+    }
+
+    var activeTicking = false;
+    function queueActiveCheck() {
+      if (activeTicking) return;
+      activeTicking = true;
+      window.requestAnimationFrame(function () {
+        activeTicking = false;
+        updateActiveItem();
+      });
+    }
+
+    updateActiveItem();
+    window.addEventListener("scroll", queueActiveCheck, { passive: true });
+    window.addEventListener("resize", queueActiveCheck);
+  }
 })();
