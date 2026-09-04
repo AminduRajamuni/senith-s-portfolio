@@ -34,6 +34,45 @@
   filter: brightness(1.15) saturate(1.05);
 }
 
+/* "Graphic Designs" heading — sits to the left of the card stack, per
+   the wireframe. Deliberately the same z-index as .graphics-stage
+   (below) and placed earlier in the DOM: same-z-index siblings stack in
+   DOM order, so the stage (and every .gcard inside it, whatever z-index
+   JS gives them — see graphics.js) always paints on top of this text.
+   As the user pages/scrolls through the deck and a card's fanned-out
+   position sweeps over the title's left-side spot, that card simply
+   covers it — no extra JS needed to "hide" it. */
+.graphics-title {
+  position: absolute;
+  top: 50%;
+  left: clamp(24px, 6vw, 96px);
+  z-index: 1;
+  margin: 0;
+  transform: translateY(-50%);
+  max-width: 40vw;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.85);
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* Toggled by graphics.js once the deck has stepped past its first card
+   (index !== 0) — the title only belongs at the untouched starting
+   position, not fighting for space once cards have fanned over it. */
+.graphics-title--hidden {
+  opacity: 0;
+}
+
+@media (max-width: 700px) {
+  .graphics-title {
+    max-width: 70vw;
+    font-size: clamp(20px, 5vw, 28px);
+  }
+}
+
 .graphics-stage {
   position: relative;
   z-index: 1;

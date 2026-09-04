@@ -5,6 +5,7 @@
   if (!section) return;
 
   var stage = section.querySelector(".graphics-stage");
+  var title = section.querySelector(".graphics-title");
   var cards = stage
     ? Array.prototype.slice.call(stage.querySelectorAll(".gcard"))
     : [];
@@ -48,6 +49,11 @@
       card.style.zIndex = String(100 - clamped);
       card.style.pointerEvents = offset === 0 ? "auto" : "none";
     });
+
+    // The title is only meant to be seen at the deck's original,
+    // untouched position — once the user has stepped away from the
+    // first card, hide it; stepping back to index 0 brings it back.
+    if (title) title.classList.toggle("graphics-title--hidden", index !== 0);
   }
 
   layout();

@@ -134,26 +134,25 @@
 
   /* ---------------------------------------------------------------- */
   /* Active-item highlighting: bold whichever linked item's section        */
-  /* currently fills at least ACTIVE_RATIO of the viewport's height — not   */
-  /* a pixel-exact 100% match, which was too strict to ever trigger once     */
-  /* sub-pixel rounding or a non-100vh section was involved. Picks the       */
-  /* section with the most visible coverage, so only one is ever active.     */
-  /* Re-evaluated on every scroll/resize tick so it swaps the instant one     */
-  /* section's place is taken by the next, in either direction.               */
+  /* currently covers the most of the viewport's height — always one of    */
+  /* them, even mid-transition when no single section fills nearly all of   */
+  /* it (e.g. scrolling past the boundary between two sections leaves both   */
+  /* partially visible). No minimum-coverage threshold: the nav should        */
+  /* never sit with nothing highlighted. Re-evaluated on every scroll/resize  */
+  /* tick so it swaps the instant one section's lead is taken by the next,    */
+  /* in either direction.                                                      */
   /* ---------------------------------------------------------------- */
 
   if (linkedItems.length) {
-    var ACTIVE_RATIO = 0.9;
-
     function updateActiveItem() {
       var current = null;
-      var bestRatio = ACTIVE_RATIO;
+      var bestRatio = -1;
       for (var i = 0; i < linkedItems.length; i++) {
         var rect = linkedItems[i].section.getBoundingClientRect();
         var visible =
           Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
         var ratio = visible / window.innerHeight;
-        if (ratio >= bestRatio) {
+        if (ratio > bestRatio) {
           current = linkedItems[i];
           bestRatio = ratio;
         }
@@ -165,11 +164,19 @@
         else item.btn.removeAttribute("aria-current");
       });
 
-      // Motion Graphics sits on a light background — the mint-green text
-      // needs to go dark there and back to normal everywhere else.
+      // Motion Graphics sits on a light background, and Reel Creations /
+      // Graphic Designs sit on busy photo/dark backgrounds — the
+      // mint-green text doesn't read well over any of the three, so it
+      // switches to white there and back to normal everywhere else.
+      var WHITE_TEXT_TARGETS = [
+        "motion-graphics",
+        "reel-creations",
+        "graphic-designs",
+      ];
       nav.classList.toggle(
         "on-light",
-        !!current && current.btn.getAttribute("data-target") === "motion-graphics"
+        !!current &&
+          WHITE_TEXT_TARGETS.indexOf(current.btn.getAttribute("data-target")) !== -1
       );
     }
 

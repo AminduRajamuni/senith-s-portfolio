@@ -342,3 +342,25 @@ export function signReelUpload(title: string): UploadSignature {
     signature,
   };
 }
+
+/* ==========================================================================
+   3D Works — Bedroom Model video. Lives at a fixed public_id (it was a
+   one-time upload via a now-removed admin page, not managed on an ongoing
+   basis), read here and wired into the Bedroom Model's slide set in
+   app/page.tsx / public/page3.js. Re-uploading would need restoring the
+   signed-upload helper this used to pair with — see git history.
+   ========================================================================== */
+
+export const SHOWCASE_ROOT = "portfolio/3d-works";
+export const BEDROOM_VIDEO_PUBLIC_ID = `${SHOWCASE_ROOT}/bedroom-video`;
+
+export async function getBedroomVideoUrl(): Promise<string | null> {
+  try {
+    const res = await cloudinary.api.resource(BEDROOM_VIDEO_PUBLIC_ID, {
+      resource_type: "video",
+    });
+    return (res as { secure_url: string }).secure_url;
+  } catch {
+    return null; // Nothing uploaded yet.
+  }
+}

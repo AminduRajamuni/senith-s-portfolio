@@ -22,9 +22,14 @@
   background-position: center;
 }
 
-/* "Motion Graphics" heading, set in the local italic display face (see
-   the localFont() call in page.tsx) — sits above the grid-paper
-   background, independent of .motion-inner's folder grid below it. */
+/* "Motion Graphics" heading — sits above the grid-paper background,
+   independent of .motion-inner's folder grid below it. Set in SF Pro
+   Semibold; SF Pro itself is Apple-licensed and can't be bundled as a
+   web font, so -apple-system/BlinkMacSystemFont resolve to the real
+   thing on Apple devices and the named "SF Pro …" entries cover
+   machines that have it installed locally, falling back to a
+   comparable system sans elsewhere (same stack as
+   .motion-folder-title). */
 .motion-title {
   position: absolute;
   top: clamp(28px, 5vw, 56px);
@@ -32,8 +37,18 @@
   right: 0;
   z-index: 1;
   margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
   font-size: clamp(26px, 3vw, 40px);
-  font-weight: 400;
+  font-weight: 600;
   text-align: center;
   color: #1d1d1f;
 }
@@ -76,7 +91,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0px;
+  gap: 8px;
   /* Reused as a <Link> for real folders and as a <button> for video tiles
      inside a folder (see app/motion-graphics/) — reset either element's
      native styling so it only ever looks like an icon-and-label tile. */
@@ -109,11 +124,11 @@
     sans-serif;
   font-weight: 600;
   font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.3;
   color: #1d1d1f;
   text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .motion-empty {

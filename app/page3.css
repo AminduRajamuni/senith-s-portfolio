@@ -13,8 +13,8 @@
      amount: that keeps the centered content-box exactly one viewport
      tall (unchanged composition) while the padding-bottom appends pure
      extra space underneath it, outside the centered region. */
-  min-height: max(560px, calc(100svh + clamp(220px, 22vw, 420px)));
-  padding-bottom: clamp(220px, 22vw, 420px);
+  min-height: max(560px, calc(100svh + clamp(100px, 10vw, 200px)));
+  padding-bottom: clamp(100px, 10vw, 200px);
   overflow: hidden;
   background: #073d2f;
   font-family: var(--font-space-grotesk), sans-serif;
@@ -32,6 +32,25 @@
   background-position: center;
 }
 
+/* "3D Works" heading — same slot/sizing as .motion-title on the Motion
+   Graphics section (see motion.css), set in this page's own display
+   font and its highlight-green accent color (same green as the active
+   model switch / focus rings below). */
+.showcase-title {
+  position: absolute;
+  top: clamp(28px, 5vw, 56px);
+  left: 0;
+  right: 0;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #9dc3a3;
+}
+
 .showcase-inner {
   position: relative;
   z-index: 1;
@@ -41,7 +60,11 @@
   justify-content: center;
   gap: clamp(28px, 5vw, 64px);
   width: 100%;
-  padding: 4vw;
+  /* Top padding well beyond the others — clears .showcase-title sitting
+     above (same reasoning as .motion-inner's top padding in motion.css)
+     and gives the frame breathing room instead of hugging the section's
+     top edge, so it reads as centered rather than pinned high. */
+  padding: clamp(120px, 14vw, 200px) 4vw 4vw;
 }
 
 /* -------------------------------------------------------------------- */
@@ -155,6 +178,18 @@
 }
 .frame img.fading {
   opacity: 0;
+}
+
+/* Bedroom Model's uploaded video slide (see public/page3.js) — fills the
+   frame exactly like the images, hidden by default since most slides are
+   still plain images; JS toggles this to block only while a video slide
+   is active. */
+.frame-video {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* -------------------------------------------------------------------- */

@@ -5,6 +5,7 @@
   if (!section) return;
 
   var frameImg = document.getElementById("showcase-image");
+  var frameVideo = document.getElementById("showcase-video");
   var buttons = Array.prototype.slice.call(
     section.querySelectorAll(".model-btn")
   );
@@ -30,10 +31,42 @@
     });
   }
 
-  function showImage(src, alt) {
-    if (!frameImg || !src || src === frameImg.getAttribute("data-current")) {
+  /* One slide, uploaded from /admin/dashboard/3d-works, can be a video
+     instead of an image — detected by extension rather than needing a
+     separate flag threaded through data-images. */
+  function isVideoSrc(src) {
+    return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(src);
+  }
+
+  function showMedia(src, alt) {
+    var currentImgSrc = frameImg ? frameImg.getAttribute("data-current") : null;
+    if (!src || src === currentImgSrc) return;
+
+    if (isVideoSrc(src)) {
+      if (frameImg) {
+        frameImg.classList.remove("fading");
+        frameImg.style.display = "none";
+        frameImg.setAttribute("data-current", src);
+      }
+      if (frameVideo) {
+        frameVideo.style.display = "block";
+        if (frameVideo.getAttribute("src") !== src) {
+          frameVideo.src = src;
+        }
+        frameVideo.play().catch(function () {
+          // Autoplay can be blocked before any user gesture — fine, the
+          // frame just shows the video's first frame until it is.
+        });
+      }
       return;
     }
+
+    if (frameVideo && frameVideo.style.display !== "none") {
+      frameVideo.pause();
+      frameVideo.style.display = "none";
+    }
+    if (!frameImg) return;
+    frameImg.style.display = "block";
     frameImg.setAttribute("data-current", src);
     frameImg.classList.add("fading");
     window.setTimeout(function () {
@@ -53,7 +86,7 @@
     state.index = 0;
     setActiveButton(btn);
     if (state.images.length) {
-      showImage(state.images[0], btn.textContent + " render");
+      showMedia(state.images[0], btn.textContent + " render");
     }
   }
 
@@ -70,7 +103,7 @@
       var dir = parseInt(btn.getAttribute("data-dir"), 10) || 1;
       state.index =
         (state.index + dir + state.images.length) % state.images.length;
-      showImage(state.images[state.index]);
+      showMedia(state.images[state.index]);
     });
   });
 

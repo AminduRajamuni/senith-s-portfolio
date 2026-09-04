@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import Script from "next/script";
-import localFont from "next/font/local";
 import "./hero.css";
 import "./page2.css";
 import "./page3.css";
@@ -14,13 +13,9 @@ import {
   listFolders,
   listReels,
   listGraphics,
+  getBedroomVideoUrl,
   isCloudinaryConfigured,
 } from "@/lib/cloudinary";
-
-const motionTitleFont = localFont({
-  src: "../public/assets/motionPage/thatthatnewpixelfamilytest-italicsquare.otf",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Kusal Senith — Motion and Visual Design",
@@ -51,7 +46,10 @@ const WHAT_I_DO = [
   "Visual Effects ( VFX )",
 ];
 
-const MODELS = [
+/* The Bedroom Model's video (a one-time upload; see getBedroomVideoUrl in
+   lib/cloudinary.ts) is spliced into its images list at request time,
+   below — see MODELS in Home(). */
+const BASE_MODELS = [
   {
     key: "robot",
     label: "Robot Model",
@@ -96,6 +94,15 @@ export default async function Home() {
   const folders = configured ? await listFolders() : [];
   const reels = configured ? await listReels() : [];
   const graphics = configured ? await listGraphics() : [];
+  const bedroomVideoUrl = configured ? await getBedroomVideoUrl() : null;
+
+  // Uploaded video (if any) leads the Bedroom Model's slides — everything
+  // else about paging through it (arrows, model switch) is unchanged.
+  const MODELS = BASE_MODELS.map((m) =>
+    m.key === "bedroom" && bedroomVideoUrl
+      ? { ...m, images: [bedroomVideoUrl, ...m.images] }
+      : m
+  );
 
   return (
     <>
@@ -280,6 +287,8 @@ export default async function Home() {
       >
         <div className="showcase-bg" aria-hidden="true" />
 
+        <h2 className="showcase-title">3D Works</h2>
+
         <div className="showcase-inner">
           <div className="stage">
             <div className="frame-wrap">
@@ -302,6 +311,17 @@ export default async function Home() {
                   src={MODELS[0].images[0]}
                   alt={`${MODELS[0].label} render`}
                   draggable={false}
+                />
+                {/* Shown instead of the img whenever the current slide is a
+                    video (see public/page3.js) — autoplaying, muted, looping,
+                    filling the frame exactly like the images do, no controls. */}
+                <video
+                  id="showcase-video"
+                  className="frame-video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                 />
               </div>
 
@@ -351,7 +371,7 @@ export default async function Home() {
       >
         <div className="motion-bg" aria-hidden="true" />
 
-        <h2 className={`motion-title ${motionTitleFont.className}`}>
+        <h2 className="motion-title">
           Motion Graphics
         </h2>
 
@@ -428,6 +448,8 @@ export default async function Home() {
         aria-label="Graphic design showcase"
       >
         <div className="graphics-bg" aria-hidden="true" />
+
+        <h2 className="graphics-title">Graphic Designs</h2>
 
         {graphics.length === 0 ? (
           <p className="graphics-empty">

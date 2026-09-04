@@ -76,9 +76,11 @@
 }
 
 /* The mint-green text reads fine over the dark hero/showcase sections, but
-   loses contrast over the light grid-paper Motion Graphics background —
-   switched to white there instead. Toggled by sidenav.js whenever that
-   section is the one currently in view. */
+   loses contrast over the light grid-paper Motion Graphics background and
+   over Reel Creations / Graphic Designs' busy photo backgrounds — switched
+   to white for all three instead. Toggled by sidenav.js whenever one of
+   those sections is the one currently in view (despite the name, "on-light"
+   now really means "needs white text", not just literally light bgs). */
 .side-nav.on-light .side-nav-item {
   color: #ffffff;
 }
