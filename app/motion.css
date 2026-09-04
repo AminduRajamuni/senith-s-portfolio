@@ -8,7 +8,7 @@
 .motion {
   position: relative;
   width: 100%;
-  min-height: 100svh;
+  min-height: 120svh;
   overflow: hidden;
   background: #f2f1ee;
 }
@@ -28,7 +28,7 @@
 .motion-inner {
   position: relative;
   z-index: 1;
-  min-height: 100svh;
+  min-height: 120svh;
   display: flex;
   align-items: center;
   justify-content: center;

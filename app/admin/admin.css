@@ -233,6 +233,29 @@
   margin: 0 0 20px;
 }
 
+.admin-subnav {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+.admin-subnav a {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: rgba(242, 235, 227, 0.6);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.admin-subnav a:hover {
+  color: #f2ebe3;
+}
+.admin-subnav a.active {
+  color: #f2ebe3;
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+}
+
 /* -------------------------------------------------------------------- */
 /* Folders                                                                */
 /* -------------------------------------------------------------------- */
@@ -500,6 +523,15 @@
   aspect-ratio: 16 / 9;
   background: #000;
   object-fit: cover;
+}
+
+/* Reels are vertical clips — narrower columns, portrait preview, same
+   card chrome otherwise. */
+.admin-reel-grid {
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+.admin-reel-preview {
+  aspect-ratio: 9 / 16;
 }
 
 .admin-video-info {

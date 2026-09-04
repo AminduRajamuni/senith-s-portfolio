@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { listFolders, isCloudinaryConfigured } from "@/lib/cloudinary";
-import FolderGrid from "./folder-grid";
-import LogoutButton from "../logout-button";
-import AdminSubnav from "../subnav";
-import "../admin.css";
+import { listReels, isCloudinaryConfigured } from "@/lib/cloudinary";
+import ReelGrid from "./reel-grid";
+import LogoutButton from "../../logout-button";
+import AdminSubnav from "../../subnav";
+import "../../admin.css";
 
 export const metadata: Metadata = {
-  title: "Motion Graphics — Admin",
+  title: "Reel Creations — Admin",
   robots: { index: false, follow: false },
 };
 
-export default async function AdminDashboardPage() {
+export default async function AdminReelCreationsPage() {
   if (!(await isAdminAuthenticated())) {
     redirect("/admin");
   }
 
   const configured = isCloudinaryConfigured();
-  const folders = configured ? await listFolders() : [];
+  const reels = configured ? await listReels() : [];
 
   return (
     <div className="admin-shell">
@@ -27,13 +27,13 @@ export default async function AdminDashboardPage() {
       <div className="admin-panel">
         <header className="admin-header">
           <div>
-            <p className="admin-eyebrow">Motion Graphics</p>
-            <h1>Folders</h1>
+            <p className="admin-eyebrow">Portfolio</p>
+            <h1>Reel Creations</h1>
           </div>
           <LogoutButton />
         </header>
 
-        <AdminSubnav active="/admin/dashboard" />
+        <AdminSubnav active="/admin/dashboard/reel-creations" />
 
         {!configured ? (
           <p className="admin-warning">
@@ -41,7 +41,7 @@ export default async function AdminDashboardPage() {
             described in ADMIN_SETUP.md, then restart the dev server.
           </p>
         ) : (
-          <FolderGrid folders={folders} />
+          <ReelGrid reels={reels} />
         )}
       </div>
     </div>

@@ -1,0 +1,96 @@
+/* ==========================================================================
+   Graphic Designs (page 5) — a fanned card-stack carousel. background.jpg's
+   fine grid texture sits behind the cards, unblurred — a blur erases 1px
+   grid lines into flat gray, so this layer stays sharp (unlike the hero's
+   blurred use of the same asset).
+
+   Interaction (see public/graphics.js):
+     - Hovering the CENTER of the screen and scrolling steps through the
+       cards one at a time, fanning left/right.
+     - Hovering the LEFT/RIGHT edges leaves the scroll alone, so it still
+       scrolls past this section to the next/previous page normally —
+       the carousel only "traps" scroll input in the middle.
+   ========================================================================== */
+
+.graphics {
+  position: relative;
+  width: 100%;
+  min-height: 120svh;
+  overflow: hidden;
+  background: #050403;
+}
+
+.graphics-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* Flat black wash layered over the grid photo (not a blur filter — this
+     stays sharp, just dimmed) to push it further back behind the cards. */
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+    url("/assets/background.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(1.15) saturate(1.05);
+}
+
+.graphics-stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 120svh;
+}
+
+.gcard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(32vw, 420px);
+  aspect-ratio: 3 / 4;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #16130f;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s ease;
+  will-change: transform, opacity;
+}
+.gcard img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.graphics-empty {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120svh;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 14px;
+}
+
+/* Without JS, there's no scroll-driven stepping — show just the first
+   card, centered, rather than an untransformed pile of overlapping ones. */
+.no-js .gcard:not(:first-child) {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .gcard {
+    width: min(60vw, 320px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gcard {
+    transition: opacity 0.3s ease !important;
+  }
+}

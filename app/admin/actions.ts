@@ -13,8 +13,12 @@ import {
   createFolder as createFolderInCloudinary,
   deleteFolder as deleteFolderInCloudinary,
   deleteVideo as deleteVideoInCloudinary,
+  deleteGraphic as deleteGraphicInCloudinary,
+  deleteReel as deleteReelInCloudinary,
   sanitizeFolderName,
   signVideoUpload,
+  signGraphicUpload,
+  signReelUpload,
   isCloudinaryConfigured,
   type UploadSignature,
 } from "@/lib/cloudinary";
@@ -132,4 +136,72 @@ export async function deleteVideoAction(
   await requireAdmin();
   await deleteVideoInCloudinary(publicId);
   revalidatePath(`/admin/dashboard/${encodeURIComponent(folder)}`);
+}
+
+/* ---------------------------------------------------------------- */
+/* Graphic Designs — flat list, title only, same signed-upload          */
+/* pattern as videos above.                                            */
+/* ---------------------------------------------------------------- */
+
+export async function requestGraphicUploadSignature(
+  title: string
+): Promise<UploadSignature | { error: string }> {
+  await requireAdmin();
+
+  if (!isCloudinaryConfigured()) {
+    return { error: "Cloudinary isn't configured yet — see ADMIN_SETUP.md." };
+  }
+
+  const trimmedTitle = title.trim().slice(0, 200);
+  if (!trimmedTitle) return { error: "Title is required." };
+
+  return signGraphicUpload(trimmedTitle);
+}
+
+export async function finalizeGraphicUpload(): Promise<void> {
+  await requireAdmin();
+  revalidatePath("/admin/dashboard/graphic-designs");
+  // The public Graphic Designs page (app/page.tsx) shows these same images.
+  revalidatePath("/");
+}
+
+export async function deleteGraphicAction(publicId: string): Promise<void> {
+  await requireAdmin();
+  await deleteGraphicInCloudinary(publicId);
+  revalidatePath("/admin/dashboard/graphic-designs");
+  revalidatePath("/");
+}
+
+/* ---------------------------------------------------------------- */
+/* Reel Creations — flat list, title only, same signed-upload            */
+/* pattern as graphics above, but resource_type "video".                 */
+/* ---------------------------------------------------------------- */
+
+export async function requestReelUploadSignature(
+  title: string
+): Promise<UploadSignature | { error: string }> {
+  await requireAdmin();
+
+  if (!isCloudinaryConfigured()) {
+    return { error: "Cloudinary isn't configured yet — see ADMIN_SETUP.md." };
+  }
+
+  const trimmedTitle = title.trim().slice(0, 200);
+  if (!trimmedTitle) return { error: "Title is required." };
+
+  return signReelUpload(trimmedTitle);
+}
+
+export async function finalizeReelUpload(): Promise<void> {
+  await requireAdmin();
+  revalidatePath("/admin/dashboard/reel-creations");
+  // The public Reel Creations page (app/page.tsx) shows these same videos.
+  revalidatePath("/");
+}
+
+export async function deleteReelAction(publicId: string): Promise<void> {
+  await requireAdmin();
+  await deleteReelInCloudinary(publicId);
+  revalidatePath("/admin/dashboard/reel-creations");
+  revalidatePath("/");
 }

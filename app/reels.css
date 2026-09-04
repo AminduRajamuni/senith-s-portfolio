@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Reel Creations (page 6) — a fixed 4-column grid of rounded, vertical
+   video tiles with side gutters (see .reels-grid). bg.jpg already has the
+   "Reel creations" title baked into its top band (see
+   public/assets/reels/bg.jpg), so this section adds no heading of its
+   own — just a thin rule beneath that band, then the tile grid filling
+   the rest of the section.
+   ========================================================================== */
+
+.reels {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #c2401f; /* fallback under bg.jpg while it loads */
+}
+
+.reels-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("/assets/reels/bg.jpg");
+  background-size: cover;
+  background-position: top center;
+}
+
+.reels-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+/* Clears the baked-in title band before the rule + tiles start. */
+.reels-spacer {
+  flex: 0 0 clamp(120px, 15vw, 210px);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 clamp(20px, 4vw, 60px) clamp(14px, 2vw, 24px);
+}
+
+.reels-rule {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Fixed at 4 columns — always exactly 4 reels across, never more, never
+   fewer, down to the mobile breakpoint below. */
+.reels-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 1.8vw, 22px);
+  padding: 0 clamp(20px, 4vw, 60px) clamp(20px, 4vw, 60px);
+}
+
+.reel-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: clamp(10px, 1.2vw, 18px);
+  background: #000;
+}
+
+.reel-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reels-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .reels-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

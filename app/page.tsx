@@ -6,8 +6,15 @@ import "./hero.css";
 import "./page2.css";
 import "./page3.css";
 import "./motion.css";
+import "./reels.css";
+import "./graphics.css";
 import "./sidenav.css";
-import { listFolders, isCloudinaryConfigured } from "@/lib/cloudinary";
+import {
+  listFolders,
+  listReels,
+  listGraphics,
+  isCloudinaryConfigured,
+} from "@/lib/cloudinary";
 
 export const metadata: Metadata = {
   title: "Kusal Senith — Motion and Visual Design",
@@ -61,8 +68,8 @@ const MODELS = [
 const SIDE_NAV_ITEMS = [
   { key: "3d-works", label: "3D Works", target: "showcase" },
   { key: "motion-graphics", label: "Motion Graphics", target: "motion-graphics" },
-  { key: "reel-creations", label: "Reel Creations", target: null },
-  { key: "graphic-designs", label: "Graphic Designs", target: null },
+  { key: "reel-creations", label: "Reel Creations", target: "reel-creations" },
+  { key: "graphic-designs", label: "Graphic Designs", target: "graphic-designs" },
 ];
 
 const TOOLS = [
@@ -79,7 +86,10 @@ function jd(seconds: number): CSSProperties {
 }
 
 export default async function Home() {
-  const folders = isCloudinaryConfigured() ? await listFolders() : [];
+  const configured = isCloudinaryConfigured();
+  const folders = configured ? await listFolders() : [];
+  const reels = configured ? await listReels() : [];
+  const graphics = configured ? await listGraphics() : [];
 
   return (
     <>
@@ -338,7 +348,7 @@ export default async function Home() {
         <div className="motion-inner">
           {folders.length === 0 ? (
             <p className="motion-empty">
-              {isCloudinaryConfigured()
+              {configured
                 ? "Motion graphics folders will show up here once added."
                 : "Motion graphics coming soon."}
             </p>
@@ -364,9 +374,74 @@ export default async function Home() {
         </div>
       </section>
 
+      <section
+        id="reel-creations"
+        className="reels"
+        aria-label="Reel creations"
+      >
+        <div className="reels-bg" aria-hidden="true" />
+
+        <div className="reels-inner">
+          <div className="reels-spacer" aria-hidden="true">
+            <div className="reels-rule" />
+          </div>
+
+          {reels.length === 0 ? (
+            <p className="reels-empty">
+              {configured
+                ? "Reels will show up here once added."
+                : "Reel creations coming soon."}
+            </p>
+          ) : (
+            <div className="reels-grid">
+              {reels.map((reel) => (
+                <div className="reel-tile" key={reel.publicId}>
+                  <video
+                    className="reel-video"
+                    src={reel.url}
+                    poster={reel.thumbnailUrl}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-label={reel.title}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section
+        id="graphic-designs"
+        className="graphics"
+        aria-label="Graphic design showcase"
+      >
+        <div className="graphics-bg" aria-hidden="true" />
+
+        {graphics.length === 0 ? (
+          <p className="graphics-empty">
+            {configured
+              ? "Graphic design work will show up here once added."
+              : "Graphic designs coming soon."}
+          </p>
+        ) : (
+          <div className="graphics-stage">
+            {graphics.map((graphic) => (
+              <div className="gcard" key={graphic.publicId}>
+                <img src={graphic.url} alt={graphic.title} draggable={false} />
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
       <Script src="/script.js" strategy="afterInteractive" />
       <Script src="/page2.js" strategy="afterInteractive" />
       <Script src="/page3.js" strategy="afterInteractive" />
+      <Script src="/graphics.js" strategy="afterInteractive" />
       <Script src="/sidenav.js" strategy="afterInteractive" />
     </>
   );

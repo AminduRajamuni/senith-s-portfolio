@@ -189,3 +189,156 @@ export function signVideoUpload(
     signature,
   };
 }
+
+/* ==========================================================================
+   Graphic Designs — a flat set of images (no folders), each with just a
+   title. Same storage/"database" approach as the videos above: Cloudinary
+   context metadata instead of a separate DB row.
+   ========================================================================== */
+
+export const GRAPHICS_ROOT = "portfolio/graphic-designs";
+
+export type GraphicSummary = {
+  publicId: string;
+  url: string;
+  title: string;
+  createdAt: string;
+};
+
+export async function listGraphics(): Promise<GraphicSummary[]> {
+  try {
+    const res = await cloudinary.api.resources({
+      type: "upload",
+      resource_type: "image",
+      prefix: `${GRAPHICS_ROOT}/`,
+      context: true,
+      max_results: 500,
+    });
+    type Resource = {
+      public_id: string;
+      secure_url: string;
+      created_at: string;
+      context?: unknown;
+    };
+    return (res.resources as Resource[])
+      .map((r) => {
+        const { title } = readContext(r.context);
+        return {
+          publicId: r.public_id,
+          url: r.secure_url,
+          title: title || "Untitled",
+          createdAt: r.created_at,
+        };
+      })
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  } catch {
+    return [];
+  }
+}
+
+export async function deleteGraphic(publicId: string): Promise<void> {
+  if (!publicId.startsWith(`${GRAPHICS_ROOT}/`)) {
+    throw new Error("Refusing to delete an asset outside the managed root.");
+  }
+  await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
+}
+
+export function signGraphicUpload(title: string): UploadSignature {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const context = `title=${escapeContextValue(title)}`;
+
+  const signature = cloudinary.utils.api_sign_request(
+    { timestamp, folder: GRAPHICS_ROOT, context },
+    process.env.CLOUDINARY_API_SECRET as string
+  );
+
+  return {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME as string,
+    apiKey: process.env.CLOUDINARY_API_KEY as string,
+    timestamp,
+    folder: GRAPHICS_ROOT,
+    context,
+    signature,
+  };
+}
+
+/* ==========================================================================
+   Reel Creations — a flat set of vertical video reels (no folders), each
+   with just a title. Same storage/"database" approach as everything above:
+   Cloudinary context metadata instead of a separate DB row, a signed
+   direct-to-Cloudinary upload, and a thumbnail derived from the video
+   itself for the grid preview.
+   ========================================================================== */
+
+export const REELS_ROOT = "portfolio/reel-creations";
+
+export type ReelSummary = {
+  publicId: string;
+  url: string;
+  thumbnailUrl: string;
+  title: string;
+  createdAt: string;
+};
+
+export async function listReels(): Promise<ReelSummary[]> {
+  try {
+    const res = await cloudinary.api.resources({
+      type: "upload",
+      resource_type: "video",
+      prefix: `${REELS_ROOT}/`,
+      context: true,
+      max_results: 500,
+    });
+    type Resource = {
+      public_id: string;
+      secure_url: string;
+      created_at: string;
+      context?: unknown;
+    };
+    return (res.resources as Resource[])
+      .map((r) => {
+        const { title } = readContext(r.context);
+        return {
+          publicId: r.public_id,
+          url: r.secure_url,
+          thumbnailUrl: cloudinary.url(r.public_id, {
+            resource_type: "video",
+            format: "jpg",
+            secure: true,
+            transformation: [{ width: 480, crop: "fill", start_offset: "0" }],
+          }),
+          title: title || "Untitled",
+          createdAt: r.created_at,
+        };
+      })
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  } catch {
+    return [];
+  }
+}
+
+export async function deleteReel(publicId: string): Promise<void> {
+  if (!publicId.startsWith(`${REELS_ROOT}/`)) {
+    throw new Error("Refusing to delete an asset outside the managed root.");
+  }
+  await cloudinary.uploader.destroy(publicId, { resource_type: "video" });
+}
+
+export function signReelUpload(title: string): UploadSignature {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const context = `title=${escapeContextValue(title)}`;
+
+  const signature = cloudinary.utils.api_sign_request(
+    { timestamp, folder: REELS_ROOT, context },
+    process.env.CLOUDINARY_API_SECRET as string
+  );
+
+  return {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME as string,
+    apiKey: process.env.CLOUDINARY_API_KEY as string,
+    timestamp,
+    folder: REELS_ROOT,
+    context,
+    signature,
+  };
+}
