@@ -10,7 +10,12 @@
 
 .hero {
   position: relative;
-  width: 100vw;
+  /* Not 100vw — that includes the vertical scrollbar's width (unlike
+     every other section's plain 100%), which was making the whole page
+     wider than the viewport and forcing a horizontal scrollbar; the
+     other sections don't fill that extra sliver, leaving a black gap
+     on their right edge. */
+  width: 100%;
   height: 100svh;
   overflow: hidden;
   background: #0b0a09;
