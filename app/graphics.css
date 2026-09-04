@@ -5,11 +5,11 @@
    blurred use of the same asset).
 
    Interaction (see public/graphics.js):
-     - Hovering the CENTER of the screen and scrolling steps through the
-       cards one at a time, fanning left/right.
-     - Hovering the LEFT/RIGHT edges leaves the scroll alone, so it still
-       scrolls past this section to the next/previous page normally —
-       the carousel only "traps" scroll input in the middle.
+     - A horizontal scroll gesture (shift+wheel, trackpad swipe) steps
+       through the cards one at a time, fanning left/right.
+     - Plain vertical scrolling is never hijacked — it always scrolls the
+       page normally, up or down, regardless of where over the section
+       the cursor is.
    ========================================================================== */
 
 .graphics {

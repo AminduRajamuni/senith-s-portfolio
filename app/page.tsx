@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import Script from "next/script";
+import localFont from "next/font/local";
 import "./hero.css";
 import "./page2.css";
 import "./page3.css";
@@ -15,6 +16,11 @@ import {
   listGraphics,
   isCloudinaryConfigured,
 } from "@/lib/cloudinary";
+
+const motionTitleFont = localFont({
+  src: "../public/assets/motionPage/thatthatnewpixelfamilytest-italicsquare.otf",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Kusal Senith — Motion and Visual Design",
@@ -345,6 +351,10 @@ export default async function Home() {
       >
         <div className="motion-bg" aria-hidden="true" />
 
+        <h2 className={`motion-title ${motionTitleFont.className}`}>
+          Motion Graphics
+        </h2>
+
         <div className="motion-inner">
           {folders.length === 0 ? (
             <p className="motion-empty">
@@ -382,9 +392,7 @@ export default async function Home() {
         <div className="reels-bg" aria-hidden="true" />
 
         <div className="reels-inner">
-          <div className="reels-spacer" aria-hidden="true">
-            <div className="reels-rule" />
-          </div>
+          <div className="reels-spacer" aria-hidden="true" />
 
           {reels.length === 0 ? (
             <p className="reels-empty">
@@ -441,6 +449,7 @@ export default async function Home() {
       <Script src="/script.js" strategy="afterInteractive" />
       <Script src="/page2.js" strategy="afterInteractive" />
       <Script src="/page3.js" strategy="afterInteractive" />
+      <Script src="/reels.js" strategy="afterInteractive" />
       <Script src="/graphics.js" strategy="afterInteractive" />
       <Script src="/sidenav.js" strategy="afterInteractive" />
     </>

@@ -120,6 +120,19 @@
   box-sizing: border-box;
 }
 
+/* Unlike the homepage's folder grid (fixed at 3 columns to match its
+   wireframe), video tiles in here get as many columns as actually fit
+   at the current width — same tile width/gap, just not capped to 3, so
+   a row doesn't leave an obviously-big-enough-for-one-more gap on the
+   right. auto-fill's fixed-width columns pack from the left and dump
+   any leftover row width as empty space at the end rather than
+   centering it, so justify-content splits that leftover evenly across
+   both sides instead of leaving it all on the right. */
+.mac-content .motion-grid {
+  grid-template-columns: repeat(auto-fill, clamp(120px, 10vw, 180px));
+  justify-content: center;
+}
+
 .mac-statusbar {
   position: fixed;
   bottom: 0;

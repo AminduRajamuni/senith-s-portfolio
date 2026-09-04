@@ -13,8 +13,8 @@
      amount: that keeps the centered content-box exactly one viewport
      tall (unchanged composition) while the padding-bottom appends pure
      extra space underneath it, outside the centered region. */
-  min-height: max(560px, calc(100svh + clamp(96px, 9vw, 180px)));
-  padding-bottom: clamp(96px, 9vw, 180px);
+  min-height: max(560px, calc(100svh + clamp(220px, 22vw, 420px)));
+  padding-bottom: clamp(220px, 22vw, 420px);
   overflow: hidden;
   background: #073d2f;
   font-family: var(--font-space-grotesk), sans-serif;

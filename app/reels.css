@@ -1,16 +1,22 @@
 /* ==========================================================================
-   Reel Creations (page 6) — a fixed 4-column grid of rounded, vertical
-   video tiles with side gutters (see .reels-grid). bg.jpg already has the
-   "Reel creations" title baked into its top band (see
-   public/assets/reels/bg.jpg), so this section adds no heading of its
-   own — just a thin rule beneath that band, then the tile grid filling
+   Reel Creations (page 6) — a horizontally-scrolling row of rounded,
+   vertical video tiles, 3.5 in view at a time (2.5 on narrower screens —
+   see the media query below) — the half-tile is deliberate, a visible
+   sliver of the next one to hint the row keeps going. Extra reels beyond
+   that aren't clipped or wrapped, just reached by sliding the row —
+   overflow-x:auto below handles touch swipe and trackpad/shift+wheel
+   natively; plain vertical scrolling is never hijacked, so it always
+   scrolls the page instead. bg.jpg already has the "Reel creations"
+   title baked into its top band
+   (see public/assets/reels/bg.jpg), so this section adds no heading of
+   its own — just a spacer to clear that band, then the tile row filling
    the rest of the section.
    ========================================================================== */
 
 .reels {
   position: relative;
   width: 100%;
-  min-height: 100svh;
+  min-height: 130svh;
   overflow: hidden;
   background: #c2401f; /* fallback under bg.jpg while it loads */
 }
@@ -29,40 +35,40 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  min-height: 130svh;
 }
 
-/* Clears the baked-in title band before the rule + tiles start. */
+/* Clears the baked-in title band before the tiles start. */
 .reels-spacer {
   flex: 0 0 clamp(120px, 15vw, 210px);
-  display: flex;
-  align-items: flex-end;
-  padding: 0 clamp(20px, 4vw, 60px) clamp(14px, 2vw, 24px);
 }
 
-.reels-rule {
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.35);
-}
-
-/* Fixed at 4 columns — always exactly 4 reels across, never more, never
-   fewer, down to the mobile breakpoint below. */
+/* 3.5 tiles per view, fixed width via flex-basis (not CSS grid) so any
+   reels past that sit off to the right instead of wrapping — reached by
+   scrolling the row horizontally. */
 .reels-grid {
+  --reel-gap: clamp(4px, 0.6vw, 8px);
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(12px, 1.8vw, 22px);
-  padding: 0 clamp(20px, 4vw, 60px) clamp(20px, 4vw, 60px);
+  display: flex;
+  gap: var(--reel-gap);
+  padding: 0 clamp(6px, 1.2vw, 16px) clamp(140px, 16vw, 260px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 }
 
 .reel-tile {
   position: relative;
   display: block;
+  flex: 0 0 calc((100% - 3 * var(--reel-gap)) / 3.5);
   aspect-ratio: 9 / 16;
   overflow: hidden;
   border-radius: clamp(10px, 1.2vw, 18px);
   background: #000;
+  scroll-snap-align: start;
 }
 
 .reel-video {
@@ -84,8 +90,8 @@
   font-size: 14px;
 }
 
-@media (max-width: 640px) {
-  .reels-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 780px) {
+  .reel-tile {
+    flex-basis: calc((100% - 2 * var(--reel-gap)) / 2.5);
   }
 }

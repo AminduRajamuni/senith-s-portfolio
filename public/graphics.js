@@ -52,22 +52,19 @@
 
   layout();
 
-  /* Center of the screen drives the carousel (scroll steps through cards,
-     one per gesture); the left/right edges deliberately do nothing here
-     so a normal wheel gesture there still scrolls past this section to
-     the next/previous page, same as everywhere else on the site. */
+  /* A horizontal scroll gesture (shift+wheel, trackpad swipe) steps
+     through the cards, one per gesture. Plain vertical scrolling is
+     never touched here — deltaY-dominant events fall straight through
+     to the page, so scrolling up/down always just scrolls the page,
+     never gets hijacked into stepping the carousel. */
   section.addEventListener(
     "wheel",
     function (e) {
-      var edgeZone = window.innerWidth * 0.16;
-      var inCenter =
-        e.clientX >= edgeZone && e.clientX <= window.innerWidth - edgeZone;
-      if (!inCenter) return;
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
 
-      var dir = e.deltaY > 0 ? 1 : -1;
+      var dir = e.deltaX > 0 ? 1 : -1;
       var next = index + dir;
-      var atBoundary = next < 0 || next >= cards.length;
-      if (atBoundary) return; // let the page scroll past this section instead
+      if (next < 0 || next >= cards.length) return; // nothing further that way
 
       e.preventDefault();
 

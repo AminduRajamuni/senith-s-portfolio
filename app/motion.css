@@ -22,21 +22,40 @@
   background-position: center;
 }
 
-/* Centers the folder grid as a whole block in the section — padding here
-   is what keeps it off the screen edges even when there are few folders,
-   rather than the grid itself being pinned to the top-left corner. */
+/* "Motion Graphics" heading, set in the local italic display face (see
+   the localFont() call in page.tsx) — sits above the grid-paper
+   background, independent of .motion-inner's folder grid below it. */
+.motion-title {
+  position: absolute;
+  top: clamp(28px, 5vw, 56px);
+  left: 0;
+  right: 0;
+  z-index: 1;
+  margin: 0;
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 400;
+  text-align: center;
+  color: #1d1d1f;
+}
+
+/* Anchors the folder grid to the top-left, Finder-desktop style — plain
+   block flow (not flex) puts it at its padded starting corner regardless
+   of folder count, rather than the whole block re-centering itself when
+   there are only one or two folders. This also matters for
+   .motion-grid's `repeat(auto-fill, …)` columns (see mac.css) — a flex
+   item's width is indefinite unless stretched/grown, and auto-fill needs
+   a definite width to compute more than 1 column; a block child just
+   inherits one from here directly. Top padding is taller than the rest
+   to clear .motion-title above it. */
 .motion-inner {
   position: relative;
   z-index: 1;
   min-height: 120svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(40px, 6vw, 96px);
+  padding: clamp(140px, 16vw, 220px) clamp(40px, 6vw, 96px) clamp(40px, 6vw, 96px);
 }
 
-/* The div holding the folder slots. Within the centered block, folders
-   still fill row by row starting at its own top-left cell. */
+/* The div holding the folder slots — fills row by row starting at its
+   own top-left cell. */
 .motion-grid {
   display: grid;
   grid-template-columns: repeat(3, clamp(120px, 10vw, 180px));
