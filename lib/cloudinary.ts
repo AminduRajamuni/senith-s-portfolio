@@ -364,3 +364,64 @@ export async function getBedroomVideoUrl(): Promise<string | null> {
     return null; // Nothing uploaded yet.
   }
 }
+
+/* ==========================================================================
+   Contact links — Instagram/LinkedIn/email for the Contact section, edited
+   from the admin panel. Same "Cloudinary as DB" approach as everything
+   above, but there's no per-item media to attach the data to, so it's kept
+   as one small JSON blob uploaded as a raw resource instead of asset
+   context. Persists across restarts/deploys the same way the rest of the
+   site's content does, with no separate database to run.
+   ========================================================================== */
+
+export const SETTINGS_ROOT = "portfolio/settings";
+export const CONTACT_LINKS_PUBLIC_ID = `${SETTINGS_ROOT}/contact-links`;
+
+export type ContactLinks = {
+  instagramUrl: string;
+  linkedinUrl: string;
+  email: string;
+};
+
+const EMPTY_CONTACT_LINKS: ContactLinks = {
+  instagramUrl: "",
+  linkedinUrl: "",
+  email: "",
+};
+
+export async function getContactLinks(): Promise<ContactLinks> {
+  try {
+    const res = await cloudinary.api.resource(CONTACT_LINKS_PUBLIC_ID, {
+      resource_type: "raw",
+    });
+    const url = (res as { secure_url: string }).secure_url;
+    // Cache-busted — this is small, infrequently-changed settings data, not
+    // media, so paying for a fresh fetch each time (rather than wiring up
+    // revalidation) keeps it simple and always correct right after a save.
+    const response = await fetch(`${url}?t=${Date.now()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) return EMPTY_CONTACT_LINKS;
+    const data = (await response.json()) as Record<string, unknown>;
+    return {
+      instagramUrl:
+        typeof data.instagramUrl === "string" ? data.instagramUrl : "",
+      linkedinUrl:
+        typeof data.linkedinUrl === "string" ? data.linkedinUrl : "",
+      email: typeof data.email === "string" ? data.email : "",
+    };
+  } catch {
+    return EMPTY_CONTACT_LINKS; // Nothing saved yet.
+  }
+}
+
+export async function saveContactLinks(links: ContactLinks): Promise<void> {
+  const json = JSON.stringify(links);
+  const dataUri = `data:application/json;base64,${Buffer.from(json).toString("base64")}`;
+  await cloudinary.uploader.upload(dataUri, {
+    public_id: CONTACT_LINKS_PUBLIC_ID,
+    resource_type: "raw",
+    overwrite: true,
+    invalidate: true,
+  });
+}

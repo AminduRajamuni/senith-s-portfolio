@@ -1,0 +1,147 @@
+/* ==========================================================================
+   Contact (final page) — the last section on the homepage. Same
+   background.jpg + dark wash treatment as Graphic Designs (graphics.css),
+   so the site reads as ending on the same visual note it built through.
+
+   The "K" mark that appears centered here isn't a second logo living in
+   this section — it's the same fixed corner brand-mark from hero.css,
+   animated over via public/contact.js once this section reaches the top
+   half of the viewport (see .brand-mark.at-contact there). This file only
+   lays out the copy underneath it.
+   ========================================================================== */
+
+@font-face {
+  font-family: "ZT Nature";
+  src: url("/assets/contact%20me/ZTNature-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.contact {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #050403;
+}
+
+.contact-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+    url("/assets/background.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(1.15) saturate(1.05);
+}
+
+.contact-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(48px, 9vh, 110px);
+  max-width: 760px;
+  margin: 0 auto;
+  /* Extra top padding leaves room for the brand-mark to land above the
+     copy once it animates to center (see file banner comment). */
+  padding: clamp(120px, 20vh, 220px) 24px 100px;
+  text-align: center;
+}
+
+.contact-copy,
+.contact-outro {
+  margin: 0;
+  font-family: "ZT Nature", var(--font-space-grotesk), sans-serif;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.contact-copy {
+  font-size: clamp(17px, 2vw, 22px);
+  line-height: 1.8;
+}
+
+.contact-outro {
+  font-size: clamp(19px, 2.3vw, 26px);
+}
+
+/* -------------------------------------------------------------------- */
+/* Links — each highlighted word reads as clickable: a distinct color/    */
+/* gradient plus an underline on hover/focus.                            */
+/* -------------------------------------------------------------------- */
+
+.contact-link {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+/* Not text-decoration: underline — the gradient-filled links below set
+   color: transparent for their text-fill, and an underline's color
+   defaults to currentColor, so it'd render invisible there while showing
+   up fine on the solid-color links (zene.film, LinkedIn): inconsistent
+   depending on which link you're on. A dimmed-opacity hover works
+   identically for both. */
+.contact-link:hover,
+.contact-link:focus-visible {
+  opacity: 0.7;
+}
+.contact-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 3px;
+}
+
+/* Gradient-filled text — Instagram and the email link both use this,
+   just with a different --contact-link-gradient. */
+.contact-link--gradient {
+  background-image: var(--contact-link-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.contact-link--instagram {
+  /* Instagram's own brand gradient. */
+  --contact-link-gradient: linear-gradient(
+    45deg,
+    #f9ce34,
+    #ee2a7b,
+    #6228d7
+  );
+}
+
+.contact-link--email {
+  /* Requested explicitly: red-to-white. */
+  --contact-link-gradient: linear-gradient(90deg, #ff453a, #ffffff);
+}
+
+.contact-link--film {
+  color: #e6803f;
+}
+
+.contact-link--linkedin {
+  color: #4aa3ff;
+}
+
+/* Rendered as a <span> instead of an <a> when the admin hasn't set that
+   URL/email yet — same highlight color as the live link (so the section
+   always reads as designed), just not wrapped as clickable. */
+.contact-copy span.contact-link {
+  cursor: default;
+}
+.contact-copy span.contact-link:hover {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .contact-inner {
+    gap: clamp(36px, 8vh, 80px);
+  }
+}

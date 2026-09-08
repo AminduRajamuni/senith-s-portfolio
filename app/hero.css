@@ -63,7 +63,7 @@
   border-radius: 50%;
   filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
   transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.25s ease, transform 0.25s ease;
+    filter 0.25s ease, transform 0.25s ease, left 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity;
 }
 .brand-mark.enter {
@@ -72,6 +72,19 @@
 .brand-mark:hover {
   filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));
   transform: scale(1.05);
+}
+
+/* Contact section (final page) — smoothly slides from the corner to the
+   horizontal center once that section is reached; toggled by
+   public/contact.js, reversible mid-scroll like every other section
+   transition on this site. Vertical position (top: 1%) is untouched, so
+   it lands top-center above the Contact copy, not dead-center. */
+.brand-mark.at-contact {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.brand-mark.at-contact:hover {
+  transform: translateX(-50%) scale(1.05);
 }
 
 /* The white mark reads fine over the dark hero/showcase backgrounds but

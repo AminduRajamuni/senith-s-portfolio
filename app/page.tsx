@@ -8,12 +8,14 @@ import "./page3.css";
 import "./motion.css";
 import "./reels.css";
 import "./graphics.css";
+import "./contact.css";
 import "./sidenav.css";
 import {
   listFolders,
   listReels,
   listGraphics,
   getBedroomVideoUrl,
+  getContactLinks,
   isCloudinaryConfigured,
 } from "@/lib/cloudinary";
 
@@ -83,6 +85,8 @@ const TOOLS = [
   { key: "id", src: "/assets/page2/tools_icons/id.png", alt: "Adobe InDesign" },
   { key: "pr", src: "/assets/page2/tools_icons/pr.png", alt: "Adobe Premiere Pro" },
   { key: "figma", src: "/assets/page2/tools_icons/figma.png", alt: "Figma" },
+  { key: "maya", src: "/assets/page2/tools_icons/maya.png", alt: "Autodesk Maya" },
+  { key: "dav", src: "/assets/page2/tools_icons/dav.png", alt: "DaVinci Resolve" },
 ];
 
 function jd(seconds: number): CSSProperties {
@@ -95,6 +99,9 @@ export default async function Home() {
   const reels = configured ? await listReels() : [];
   const graphics = configured ? await listGraphics() : [];
   const bedroomVideoUrl = configured ? await getBedroomVideoUrl() : null;
+  const contactLinks = configured
+    ? await getContactLinks()
+    : { instagramUrl: "", linkedinUrl: "", email: "" };
 
   // Uploaded video (if any) leads the Bedroom Model's slides — everything
   // else about paging through it (arrows, model switch) is unchanged.
@@ -468,11 +475,76 @@ export default async function Home() {
         )}
       </section>
 
+      <section id="contact" className="contact" aria-label="Contact">
+        <div className="contact-bg" aria-hidden="true" />
+
+        <div className="contact-inner">
+          <p className="contact-copy">
+            Follow my{" "}
+            {contactLinks.instagramUrl ? (
+              <a
+                className="contact-link contact-link--gradient contact-link--instagram"
+                href={contactLinks.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Instagram
+              </a>
+            ) : (
+              <span className="contact-link contact-link--gradient contact-link--instagram">
+                Instagram
+              </span>
+            )}{" "}
+            for what I&rsquo;m up to. See my photographs and films at{" "}
+            <a
+              className="contact-link contact-link--film"
+              href="https://zene.film"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              zene.film
+            </a>
+            . Learn more about me on{" "}
+            {contactLinks.linkedinUrl ? (
+              <a
+                className="contact-link contact-link--linkedin"
+                href={contactLinks.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>
+            ) : (
+              <span className="contact-link contact-link--linkedin">
+                LinkedIn
+              </span>
+            )}
+            . Or simply write to me at{" "}
+            {contactLinks.email ? (
+              <a
+                className="contact-link contact-link--gradient contact-link--email"
+                href={`mailto:${contactLinks.email}`}
+              >
+                {contactLinks.email}
+              </a>
+            ) : (
+              <span className="contact-link contact-link--gradient contact-link--email">
+                my email
+              </span>
+            )}
+            .
+          </p>
+
+          <p className="contact-outro">I&rsquo;d love to hear from you!</p>
+        </div>
+      </section>
+
       <Script src="/script.js" strategy="afterInteractive" />
       <Script src="/page2.js" strategy="afterInteractive" />
       <Script src="/page3.js" strategy="afterInteractive" />
       <Script src="/reels.js" strategy="afterInteractive" />
       <Script src="/graphics.js" strategy="afterInteractive" />
+      <Script src="/contact.js" strategy="afterInteractive" />
       <Script src="/sidenav.js" strategy="afterInteractive" />
     </>
   );

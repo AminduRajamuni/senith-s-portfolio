@@ -12,6 +12,14 @@
        the cursor is.
    ========================================================================== */
 
+@font-face {
+  font-family: "Helvetica Neue Thin Cond Obl";
+  src: url("/assets/graphics/HelveticaNeue-ThinCondObl.otf") format("opentype");
+  font-weight: 100;
+  font-style: oblique;
+  font-display: swap;
+}
+
 .graphics {
   position: relative;
   width: 100%;
@@ -50,8 +58,9 @@
   margin: 0;
   transform: translateY(-50%);
   max-width: 40vw;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 300;
+  font-family: "Helvetica Neue Thin Cond Obl", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  font-weight: 100;
   font-size: clamp(26px, 3vw, 40px);
   letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.85);

@@ -15,6 +15,7 @@ import {
   deleteVideo as deleteVideoInCloudinary,
   deleteGraphic as deleteGraphicInCloudinary,
   deleteReel as deleteReelInCloudinary,
+  saveContactLinks as saveContactLinksInCloudinary,
   sanitizeFolderName,
   signVideoUpload,
   signGraphicUpload,
@@ -204,4 +205,43 @@ export async function deleteReelAction(publicId: string): Promise<void> {
   await deleteReelInCloudinary(publicId);
   revalidatePath("/admin/dashboard/reel-creations");
   revalidatePath("/");
+}
+
+/* ---------------------------------------------------------------- */
+/* Contact links — Instagram/LinkedIn/email shown in the Contact       */
+/* section's paragraph on the public homepage.                        */
+/* ---------------------------------------------------------------- */
+
+export type ContactLinksActionState = { error?: string; saved?: boolean } | undefined;
+
+export async function saveContactLinksAction(
+  _prevState: ContactLinksActionState,
+  formData: FormData
+): Promise<ContactLinksActionState> {
+  await requireAdmin();
+
+  if (!isCloudinaryConfigured()) {
+    return { error: "Cloudinary isn't configured yet — see ADMIN_SETUP.md." };
+  }
+
+  const instagramUrl = String(formData.get("instagramUrl") ?? "").trim();
+  const linkedinUrl = String(formData.get("linkedinUrl") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim();
+
+  for (const url of [instagramUrl, linkedinUrl]) {
+    if (url && !/^https?:\/\//i.test(url)) {
+      return { error: "Instagram/LinkedIn links need to start with http:// or https://." };
+    }
+  }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: "That doesn't look like a valid email address." };
+  }
+
+  await saveContactLinksInCloudinary({ instagramUrl, linkedinUrl, email });
+
+  revalidatePath("/admin/dashboard/contact");
+  // The public Contact section (app/page.tsx) reads these same links.
+  revalidatePath("/");
+
+  return { saved: true };
 }

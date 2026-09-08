@@ -47,16 +47,23 @@
    reels past that sit off to the right instead of wrapping — reached by
    scrolling the row horizontally. */
 .reels-grid {
-  --reel-gap: clamp(4px, 0.6vw, 8px);
+  --reel-gap: clamp(20px, 3vw, 48px);
+  --reel-pad: clamp(6px, 1.2vw, 16px);
+  /* Width of one tile, as a fraction of the row's own content box —
+     3.5 tiles per view (2.5 below 780px, see media query). Kept as a
+     variable so the leading spacer below can read it back to compute
+     an exact center, instead of guessing an offset in vw. */
+  --reel-tile-w: calc((100% - 3 * var(--reel-gap)) / 3.5);
   flex: 1;
   display: flex;
+  /* Vertically centers the tile row in the space below the spacer, so
+     the reels start from the middle of the screen the same way the
+     Graphic Designs card stack does — the horizontal auto-scroll/snap
+     interaction below is unchanged, only the row's cross-axis position
+     moves. */
+  align-items: center;
   gap: var(--reel-gap);
-  /* Left padding lines the first tile up with the right edge of the
-     fixed "K" brand mark (see .brand-mark in hero.css: left: 1%,
-     width: clamp(40px, 6.5vw, 50px)) instead of hugging the section
-     edge like the other sides still do. */
-  padding: 0 clamp(6px, 1.2vw, 16px) clamp(140px, 16vw, 260px)
-    calc(1vw + clamp(40px, 6.5vw, 50px));
+  padding: 0 var(--reel-pad) clamp(140px, 16vw, 260px) var(--reel-pad);
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x proximity;
@@ -65,10 +72,25 @@
   scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 }
 
+/* Leading spacer — a flex item, not padding, so it doesn't shrink the
+   container's own content-box width (.reel-tile's flex-basis is a
+   percentage of that box, so padding here would shrink every tile
+   along with the inset). Sized so the FIRST TILE'S CENTER lands
+   exactly on the viewport's horizontal middle: half the viewport,
+   minus the row's own edge padding, minus half a tile. Scrolling
+   (overflow-x above, unchanged) then carries this spacer off first,
+   so past it the row reads as a normal edge-to-edge scroll — tiles
+   cropped at both ends as they pass, per the reference screenshots. */
+.reels-grid::before {
+  content: "";
+  flex: 0 0
+    calc(50vw - var(--reel-pad) - (var(--reel-tile-w) / 2));
+}
+
 .reel-tile {
   position: relative;
   display: block;
-  flex: 0 0 calc((100% - 3 * var(--reel-gap)) / 3.5);
+  flex: 0 0 var(--reel-tile-w);
   aspect-ratio: 9 / 16;
   overflow: hidden;
   border-radius: clamp(10px, 1.2vw, 18px);
@@ -96,7 +118,10 @@
 }
 
 @media (max-width: 780px) {
-  .reel-tile {
-    flex-basis: calc((100% - 2 * var(--reel-gap)) / 2.5);
+  .reels-grid {
+    /* 2.5 tiles per view instead of 3.5 — redefining the variable here
+       (rather than overriding .reel-tile's flex-basis directly) keeps
+       the spacer's centering calc above in sync automatically. */
+    --reel-tile-w: calc((100% - 2 * var(--reel-gap)) / 2.5);
   }
 }
