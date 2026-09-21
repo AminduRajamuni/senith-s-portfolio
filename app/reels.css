@@ -127,13 +127,15 @@
     --reel-tile-w: calc((100% - 1 * var(--reel-gap)) / 1.5);
   }
 
-  /* At this tile size the desktop centering formula above puts the
-     first tile right up against the container's edge padding with
-     nothing visually left of it, reading as flush against the screen
-     edge — a plain fixed inset here reads far more reliably than
-     chasing that formula further. */
+  /* The desktop centering formula (::before spacer) still wasn't
+     leaving any visible gap at this tile size, so it's dropped
+     entirely on mobile in favor of a plain margin on the first tile —
+     simple, and not dependent on any calc()/gap interaction. */
   .reels-grid::before {
-    flex: 0 0 20px;
+    display: none;
+  }
+  .reel-tile:first-child {
+    margin-left: 20px;
   }
 }
 
@@ -144,6 +146,9 @@
   }
 
   .reels-grid::before {
-    flex: 0 0 24px;
+    display: none;
+  }
+  .reel-tile:first-child {
+    margin-left: 28px;
   }
 }
