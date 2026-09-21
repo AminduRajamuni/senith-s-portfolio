@@ -20,7 +20,7 @@ export default async function AdminContactPage() {
   const configured = isCloudinaryConfigured();
   const links = configured
     ? await getContactLinks()
-    : { instagramUrl: "", linkedinUrl: "", email: "" };
+    : { instagramUrl: "", zeneFilmUrl: "", linkedinUrl: "", email: "" };
 
   return (
     <div className="admin-shell">
@@ -45,9 +45,11 @@ export default async function AdminContactPage() {
         ) : (
           <>
             <p className="admin-empty">
-              These power the highlighted Instagram, LinkedIn and email links
-              in the Contact section at the bottom of the homepage. Leave any
-              field blank to show that word as plain, non-clickable text.
+              These power the highlighted Instagram, zene.film, LinkedIn and
+              email links in the Contact section at the bottom of the
+              homepage — Instagram and zene.film are both Instagram profile
+              links, just two different accounts. Leave any field blank to
+              show that word as plain, non-clickable text.
             </p>
             <ContactLinksForm links={links} />
           </>

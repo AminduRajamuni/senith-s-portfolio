@@ -58,6 +58,23 @@
 
   layout();
 
+  /* Shared by both the wheel and touch handlers below: bounds-checks,
+     throttles to one step per gesture, and re-renders. Returns whether it
+     actually stepped, so each caller only preventDefault()s a gesture it's
+     committed to consuming. */
+  function step(dir) {
+    var next = index + dir;
+    if (next < 0 || next >= cards.length) return false; // nothing further that way
+
+    var now = Date.now();
+    if (now - lastStep < STEP_MS) return false;
+    lastStep = now;
+
+    index = next;
+    layout();
+    return true;
+  }
+
   /* A horizontal scroll gesture (shift+wheel, trackpad swipe) steps
      through the cards, one per gesture. Plain vertical scrolling is
      never touched here — deltaY-dominant events fall straight through
@@ -67,21 +84,58 @@
     "wheel",
     function (e) {
       if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-
-      var dir = e.deltaX > 0 ? 1 : -1;
-      var next = index + dir;
-      if (next < 0 || next >= cards.length) return; // nothing further that way
-
-      e.preventDefault();
-
-      var now = Date.now();
-      if (now - lastStep < STEP_MS) return;
-      lastStep = now;
-
-      index = next;
-      layout();
+      if (step(e.deltaX > 0 ? 1 : -1)) e.preventDefault();
     },
     { passive: false }
+  );
+
+  /* Touch equivalent — wheel/trackpad gestures don't exist on phones, so
+     without this the deck would be permanently stuck on the first card
+     there. Same "one step per gesture" feel: a horizontal drag past
+     SWIPE_PX steps once and the rest of that same touch is ignored, no
+     multi-card flinging. A mostly-vertical drag is left completely alone
+     (no preventDefault at all) so the page scrolls normally — mirrors the
+     wheel handler's deltaX-vs-deltaY check, just decided once the drag
+     has moved far enough to tell direction instead of per-tick. */
+  var SWIPE_PX = 40;
+  var touchStartX = null;
+  var touchStartY = null;
+  var touchDecided = false;
+
+  section.addEventListener(
+    "touchstart",
+    function (e) {
+      if (e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchDecided = false;
+    },
+    { passive: true }
+  );
+
+  section.addEventListener(
+    "touchmove",
+    function (e) {
+      if (touchStartX === null || touchDecided) return;
+      var dx = e.touches[0].clientX - touchStartX;
+      var dy = e.touches[0].clientY - touchStartY;
+      if (Math.abs(dx) < SWIPE_PX && Math.abs(dy) < SWIPE_PX) return;
+
+      touchDecided = true;
+      if (Math.abs(dx) <= Math.abs(dy)) return; // vertical drag — let the page scroll
+
+      if (step(dx < 0 ? 1 : -1)) e.preventDefault();
+    },
+    { passive: false }
+  );
+
+  section.addEventListener(
+    "touchend",
+    function () {
+      touchStartX = null;
+      touchStartY = null;
+    },
+    { passive: true }
   );
 
   /* Reveal on scroll into view, matching the about/showcase pattern. */

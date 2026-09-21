@@ -37,6 +37,18 @@ export default function ContactLinksForm({ links }: { links: ContactLinks }) {
       </label>
 
       <label className="admin-contact-field">
+        <span>zene.film URL (Instagram — separate account)</span>
+        <input
+          type="url"
+          name="zeneFilmUrl"
+          placeholder="https://instagram.com/zene.flm"
+          defaultValue={links.zeneFilmUrl}
+          disabled={pending}
+          className="admin-upload-title"
+        />
+      </label>
+
+      <label className="admin-contact-field">
         <span>LinkedIn URL</span>
         <input
           type="url"

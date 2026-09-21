@@ -366,12 +366,15 @@ export async function getBedroomVideoUrl(): Promise<string | null> {
 }
 
 /* ==========================================================================
-   Contact links — Instagram/LinkedIn/email for the Contact section, edited
-   from the admin panel. Same "Cloudinary as DB" approach as everything
-   above, but there's no per-item media to attach the data to, so it's kept
-   as one small JSON blob uploaded as a raw resource instead of asset
-   context. Persists across restarts/deploys the same way the rest of the
-   site's content does, with no separate database to run.
+   Contact links — Instagram/zene.film/LinkedIn/email for the Contact
+   section, edited from the admin panel. instagramUrl and zeneFilmUrl are
+   both Instagram profile links, just two different accounts — the
+   personal one, and the "zene.film" one, highlighted separately in the
+   Contact paragraph (see app/page.tsx). Same "Cloudinary as DB" approach
+   as everything above, but there's no per-item media to attach the data
+   to, so it's kept as one small JSON blob uploaded as a raw resource
+   instead of asset context. Persists across restarts/deploys the same way
+   the rest of the site's content does, with no separate database to run.
    ========================================================================== */
 
 export const SETTINGS_ROOT = "portfolio/settings";
@@ -379,12 +382,14 @@ export const CONTACT_LINKS_PUBLIC_ID = `${SETTINGS_ROOT}/contact-links`;
 
 export type ContactLinks = {
   instagramUrl: string;
+  zeneFilmUrl: string;
   linkedinUrl: string;
   email: string;
 };
 
 const EMPTY_CONTACT_LINKS: ContactLinks = {
   instagramUrl: "",
+  zeneFilmUrl: "",
   linkedinUrl: "",
   email: "",
 };
@@ -406,6 +411,8 @@ export async function getContactLinks(): Promise<ContactLinks> {
     return {
       instagramUrl:
         typeof data.instagramUrl === "string" ? data.instagramUrl : "",
+      zeneFilmUrl:
+        typeof data.zeneFilmUrl === "string" ? data.zeneFilmUrl : "",
       linkedinUrl:
         typeof data.linkedinUrl === "string" ? data.linkedinUrl : "",
       email: typeof data.email === "string" ? data.email : "",

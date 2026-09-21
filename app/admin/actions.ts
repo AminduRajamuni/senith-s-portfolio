@@ -208,8 +208,10 @@ export async function deleteReelAction(publicId: string): Promise<void> {
 }
 
 /* ---------------------------------------------------------------- */
-/* Contact links — Instagram/LinkedIn/email shown in the Contact       */
-/* section's paragraph on the public homepage.                        */
+/* Contact links — Instagram/zene.film/LinkedIn/email shown in the     */
+/* Contact section's paragraph on the public homepage. instagramUrl     */
+/* and zeneFilmUrl are both Instagram profile links, just two           */
+/* different accounts.                                                  */
 /* ---------------------------------------------------------------- */
 
 export type ContactLinksActionState = { error?: string; saved?: boolean } | undefined;
@@ -225,19 +227,20 @@ export async function saveContactLinksAction(
   }
 
   const instagramUrl = String(formData.get("instagramUrl") ?? "").trim();
+  const zeneFilmUrl = String(formData.get("zeneFilmUrl") ?? "").trim();
   const linkedinUrl = String(formData.get("linkedinUrl") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
 
-  for (const url of [instagramUrl, linkedinUrl]) {
+  for (const url of [instagramUrl, zeneFilmUrl, linkedinUrl]) {
     if (url && !/^https?:\/\//i.test(url)) {
-      return { error: "Instagram/LinkedIn links need to start with http:// or https://." };
+      return { error: "Instagram/zene.film/LinkedIn links need to start with http:// or https://." };
     }
   }
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { error: "That doesn't look like a valid email address." };
   }
 
-  await saveContactLinksInCloudinary({ instagramUrl, linkedinUrl, email });
+  await saveContactLinksInCloudinary({ instagramUrl, zeneFilmUrl, linkedinUrl, email });
 
   revalidatePath("/admin/dashboard/contact");
   // The public Contact section (app/page.tsx) reads these same links.

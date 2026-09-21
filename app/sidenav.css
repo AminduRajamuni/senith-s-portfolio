@@ -113,3 +113,61 @@ button.side-nav-item:focus-visible {
     width: min(72vw, 240px);
   }
 }
+
+/* -------------------------------------------------------------------- */
+/* Touch fallback — sidenav.js's hover-proximity reveal only wires up on  */
+/* devices with a real cursor (see the `fineHover` check there); nothing  */
+/* on a phone/tablet can "hover near the edge". This small edge tab is    */
+/* its tap-to-toggle equivalent, so the nav stays reachable there too,    */
+/* not just for the one 2s auto-open on first arrival. Hidden entirely    */
+/* whenever a fine hover pointer is available, so desktop never sees it.  */
+/* -------------------------------------------------------------------- */
+
+.side-nav-tab {
+  display: none;
+}
+
+@media (hover: none) {
+  .side-nav-tab {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 0;
+    z-index: 901;
+    width: 16px;
+    height: 60px;
+    padding: 0;
+    border: 0;
+    border-radius: 0 10px 10px 0;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+  }
+  /* Toggled by sidenav.js in lockstep with .side-nav's own section gate
+     (see evaluateSection() there) — same "only past #about" rule the
+     panel itself follows, just applied to this tap target too. */
+  .side-nav-tab.ready {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) translateX(0);
+  }
+  .side-nav-tab::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 22px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.75);
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .side-nav-tab {
+    transition: none !important;
+  }
+}

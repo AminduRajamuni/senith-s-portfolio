@@ -4,6 +4,7 @@
   var nav = document.getElementById("side-nav");
   if (!nav) return;
 
+  var tab = document.getElementById("side-nav-tab");
   var about = document.getElementById("about");
   var autoShown = false;
   var forceOpen = false;
@@ -12,6 +13,10 @@
 
   function sync() {
     nav.classList.toggle("open", sectionReady && (forceOpen || hovering));
+    if (tab) {
+      tab.classList.toggle("ready", sectionReady);
+      tab.setAttribute("aria-expanded", String(hovering));
+    }
   }
 
   /* ---------------------------------------------------------------- */
@@ -114,6 +119,29 @@
       hovering = false;
       sync();
     });
+  } else if (tab) {
+    /* No fine hover pointer (phone/tablet) — the edge tab (sidenav.css)
+       is this device's way in instead: tap to open, tap it again or tap
+       anywhere outside the open panel to close. `fineHover.matches` and
+       this branch are mutually exclusive (a device's primary pointer is
+       either hover-capable or it isn't), so there's no double-handling
+       on the rare hybrid device. */
+    tab.addEventListener("click", function () {
+      hovering = !hovering;
+      sync();
+    });
+
+    document.addEventListener(
+      "touchstart",
+      function (e) {
+        if (!hovering) return;
+        var target = e.target;
+        if (nav.contains(target) || tab.contains(target)) return;
+        hovering = false;
+        sync();
+      },
+      { passive: true }
+    );
   }
 
   /* Linked items scroll to their section on click; the rest have no
@@ -129,6 +157,14 @@
     if (section) linkedItems.push({ btn: btn, section: section });
     btn.addEventListener("click", function () {
       if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+      // On touch, nothing else closes the panel after picking a
+      // destination (there's no mouse to move away with) — do it here.
+      // A no-op on hover-capable devices: `hovering` there tracks live
+      // cursor position, not a state this click should override.
+      if (!fineHover.matches && hovering) {
+        hovering = false;
+        sync();
+      }
     });
   });
 

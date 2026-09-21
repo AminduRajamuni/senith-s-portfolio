@@ -101,7 +101,7 @@ export default async function Home() {
   const bedroomVideoUrl = configured ? await getBedroomVideoUrl() : null;
   const contactLinks = configured
     ? await getContactLinks()
-    : { instagramUrl: "", linkedinUrl: "", email: "" };
+    : { instagramUrl: "", zeneFilmUrl: "", linkedinUrl: "", email: "" };
 
   // Uploaded video (if any) leads the Bedroom Model's slides — everything
   // else about paging through it (arrows, model switch) is unchanged.
@@ -132,6 +132,18 @@ export default async function Home() {
           draggable={false}
         />
       </div>
+
+      {/* Touch devices have no hover to reveal the side nav with (see
+          sidenav.js) — this is their equivalent trigger: hidden on
+          hover-capable devices via CSS, tap to toggle on the rest. */}
+      <button
+        id="side-nav-tab"
+        type="button"
+        className="side-nav-tab"
+        aria-label="Toggle section navigation"
+        aria-controls="side-nav"
+        aria-expanded="false"
+      />
 
       <nav id="side-nav" className="side-nav" aria-label="Portfolio sections">
         <ul className="side-nav-list">
@@ -496,14 +508,20 @@ export default async function Home() {
               </span>
             )}{" "}
             for what I&rsquo;m up to. See my photographs and films at{" "}
-            <a
-              className="contact-link contact-link--film"
-              href="https://zene.film"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              zene.film
-            </a>
+            {contactLinks.zeneFilmUrl ? (
+              <a
+                className="contact-link contact-link--film"
+                href={contactLinks.zeneFilmUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                zene.film
+              </a>
+            ) : (
+              <span className="contact-link contact-link--film">
+                zene.film
+              </span>
+            )}
             . Learn more about me on{" "}
             {contactLinks.linkedinUrl ? (
               <a

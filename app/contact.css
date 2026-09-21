@@ -1,7 +1,6 @@
 /* ==========================================================================
-   Contact (final page) — the last section on the homepage. Same
-   background.jpg + dark wash treatment as Graphic Designs (graphics.css),
-   so the site reads as ending on the same visual note it built through.
+   Contact (final page) — the last section on the homepage, background.jpg
+   asset 901.jpg + dark wash treatment.
 
    The "K" mark that appears centered here isn't a second logo living in
    this section — it's the same fixed corner brand-mark from hero.css,
@@ -35,7 +34,7 @@
   z-index: 0;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
-    url("/assets/background.jpg");
+    url("/assets/901.jpg");
   background-size: cover;
   background-position: center;
   filter: brightness(1.15) saturate(1.05);
@@ -52,7 +51,7 @@
   margin: 0 auto;
   /* Extra top padding leaves room for the brand-mark to land above the
      copy once it animates to center (see file banner comment). */
-  padding: clamp(120px, 20vh, 220px) 24px 100px;
+  padding: clamp(200px, 32vh, 360px) 24px 100px;
   text-align: center;
 }
 

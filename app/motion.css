@@ -136,3 +136,23 @@
   font-size: 14px;
   color: rgba(29, 29, 31, 0.55);
 }
+
+/* -------------------------------------------------------------------- */
+/* Responsive                                                            */
+/* -------------------------------------------------------------------- */
+
+/* The desktop grid's 3 fixed columns (each up to 180px) plus its wide
+   gaps (up to 220px) need well over 500px of content width just for the
+   grid itself — comfortably more than an entire phone screen. Below
+   640px this drops to 2 narrower columns with much tighter gaps, still
+   filling row by row from the top-left like the desktop version. */
+@media (max-width: 640px) {
+  .motion-inner {
+    padding: clamp(120px, 30vw, 170px) 24px 48px;
+  }
+  .motion-grid {
+    grid-template-columns: repeat(2, minmax(88px, 128px));
+    column-gap: clamp(28px, 10vw, 56px);
+    row-gap: clamp(28px, 8vw, 44px);
+  }
+}

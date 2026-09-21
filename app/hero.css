@@ -63,7 +63,9 @@
   border-radius: 50%;
   filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
   transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.25s ease, transform 0.25s ease, left 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    filter 0.25s ease, transform 0.25s ease,
+    left 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity;
 }
 .brand-mark.enter {
@@ -75,12 +77,13 @@
 }
 
 /* Contact section (final page) — smoothly slides from the corner to the
-   horizontal center once that section is reached; toggled by
-   public/contact.js, reversible mid-scroll like every other section
-   transition on this site. Vertical position (top: 1%) is untouched, so
-   it lands top-center above the Contact copy, not dead-center. */
+   horizontal center and a bit lower than its usual top: 1%, once that
+   section is reached; toggled by public/contact.js, reversible mid-scroll
+   like every other section transition on this site — scrolling back out
+   returns it to the exact original corner position (left: 1%, top: 1%). */
 .brand-mark.at-contact {
   left: 50%;
+  top: clamp(48px, 6vh, 90px);
   transform: translateX(-50%);
 }
 .brand-mark.at-contact:hover {
