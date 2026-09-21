@@ -143,4 +143,18 @@
   .contact-inner {
     gap: clamp(36px, 8vh, 80px);
   }
+
+  /* .contact-bg covers the whole section (inset: 0), and on mobile the
+     section grows well past one viewport tall once the copy wraps onto
+     several lines — background-size: cover then has to zoom in to fill
+     that extra height, cropping 901.jpg (a 3840x2160 landscape frame)
+     down to a narrow center sliver instead of showing the full hands.
+     Sizing to the section's width instead (no vertical crop needed since
+     the image is short relative to the tall section) keeps the whole
+     image intact, anchored near the top where it sits before the copy. */
+  .contact-bg {
+    background-size: 100% auto;
+    background-position: top center;
+    background-repeat: no-repeat;
+  }
 }

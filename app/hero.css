@@ -424,24 +424,29 @@
     width: 85%;
   }
   .obj--keyboard {
-    left: 64%;
-    top: -10%;
-    width: 40%;
+    left: 58%;
+    top: -15%;
+    width: 56%;
   }
   .obj--mic {
-    left: -22%;
+    /* Bigger + rotated so the crop boundary (viewport edge + the
+       clip-path that isolates just the capsule on desktop) cuts along
+       the capsule's own diagonal instead of slicing straight across
+       it — that straight slice was the "cutout" artifact. */
+    left: -14%;
     top: 46%;
-    width: 52%;
+    width: 78%;
+    --rot: -16deg;
   }
   .obj--notebook {
-    left: 46%;
-    top: 68%;
-    width: 54%;
+    left: 58%;
+    top: 78%;
+    width: 60%;
   }
   .obj--sunglasses {
-    left: 2%;
-    top: 82%;
-    width: 28%;
+    left: 4%;
+    top: 90%;
+    width: 40%;
   }
   .logo {
     width: 84%;
