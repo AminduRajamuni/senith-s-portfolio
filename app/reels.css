@@ -129,13 +129,13 @@
 
   /* The desktop centering formula (::before spacer) still wasn't
      leaving any visible gap at this tile size, so it's dropped
-     entirely on mobile in favor of a plain margin on the first tile —
+     entirely on mobile in favor of a plain left inset on the row —
      simple, and not dependent on any calc()/gap interaction. */
+  .reels-grid {
+    padding-left: 24px;
+  }
   .reels-grid::before {
     display: none;
-  }
-  .reel-tile:first-child {
-    margin-left: 20px;
   }
 }
 
@@ -143,12 +143,10 @@
   .reels-grid {
     /* Smaller phones: 1.2 tiles per view, bigger still. */
     --reel-tile-w: calc((100% - 1 * var(--reel-gap)) / 1.2);
+    padding-left: 32px;
   }
 
   .reels-grid::before {
     display: none;
-  }
-  .reel-tile:first-child {
-    margin-left: 28px;
   }
 }
