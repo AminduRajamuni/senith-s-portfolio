@@ -435,7 +435,7 @@
        own diagonal instead of slicing straight across it — that
        straight slice was the "cutout" artifact. */
     left: -32%;
-    top: 44%;
+    top: 56%;
     width: 90%;
     --rot: 74deg;
   }
@@ -446,7 +446,7 @@
   }
   .obj--sunglasses {
     left: -8%;
-    top: 88%;
+    top: 80%;
     width: 46%;
   }
   .logo {
