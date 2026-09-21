@@ -434,9 +434,9 @@
        isolates just the capsule on desktop) cuts along the capsule's
        own diagonal instead of slicing straight across it — that
        straight slice was the "cutout" artifact. */
-    left: -14%;
-    top: 46%;
-    width: 78%;
+    left: -32%;
+    top: 44%;
+    width: 90%;
     --rot: 74deg;
   }
   .obj--notebook {
@@ -445,9 +445,9 @@
     width: 60%;
   }
   .obj--sunglasses {
-    left: 4%;
-    top: 78%;
-    width: 40%;
+    left: -8%;
+    top: 88%;
+    width: 46%;
   }
   .logo {
     width: 84%;

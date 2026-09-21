@@ -49,12 +49,6 @@
 .reels-grid {
   --reel-gap: clamp(20px, 3vw, 48px);
   --reel-pad: clamp(6px, 1.2vw, 16px);
-  /* Extra fixed offset added to the centering calc below, on top of
-     --reel-pad — mobile-only (see media queries), since --reel-pad
-     cancels out of that formula algebraically (it's added back by the
-     container's own left padding), so bumping it alone can't create
-     visible breathing room from the edge the way this can. */
-  --reel-edge-gap: 0px;
   /* Width of one tile, as a fraction of the row's own content box —
      3.5 tiles per view (2.5 below 780px, see media query). Kept as a
      variable so the leading spacer below can read it back to compute
@@ -90,7 +84,7 @@
 .reels-grid::before {
   content: "";
   flex: 0 0
-    calc(50vw - var(--reel-pad) - (var(--reel-tile-w) / 2) + var(--reel-edge-gap));
+    calc(50vw - var(--reel-pad) - (var(--reel-tile-w) / 2));
 }
 
 .reel-tile {
@@ -131,7 +125,15 @@
        tiles per view means each one claims more of the viewport width,
        which is what makes them read as "bigger" on phones. */
     --reel-tile-w: calc((100% - 1 * var(--reel-gap)) / 1.5);
-    --reel-edge-gap: 16px;
+  }
+
+  /* At this tile size the desktop centering formula above puts the
+     first tile right up against the container's edge padding with
+     nothing visually left of it, reading as flush against the screen
+     edge — a plain fixed inset here reads far more reliably than
+     chasing that formula further. */
+  .reels-grid::before {
+    flex: 0 0 20px;
   }
 }
 
@@ -139,6 +141,9 @@
   .reels-grid {
     /* Smaller phones: 1.2 tiles per view, bigger still. */
     --reel-tile-w: calc((100% - 1 * var(--reel-gap)) / 1.2);
-    --reel-edge-gap: 20px;
+  }
+
+  .reels-grid::before {
+    flex: 0 0 24px;
   }
 }
