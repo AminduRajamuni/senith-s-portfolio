@@ -40,9 +40,24 @@
   filter: brightness(1.15) saturate(1.05);
 }
 
+/* Hands layer (public/assets/hands.png) — mobile-only, see media query
+   below. Sits above .contact-bg but below .contact-inner, so the copy
+   always reads on top even where the two overlap. */
+.contact-hands {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: url("/assets/hands.png");
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
 .contact-inner {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -144,17 +159,21 @@
     gap: clamp(36px, 8vh, 80px);
   }
 
-  /* .contact-bg covers the whole section (inset: 0), and on mobile the
-     section grows well past one viewport tall once the copy wraps onto
-     several lines — background-size: cover then has to zoom in to fill
-     that extra height, cropping 901.jpg (a 3840x2160 landscape frame)
-     down to a narrow center sliver instead of showing the full hands.
-     Sizing to the section's width instead (no vertical crop needed since
-     the image is short relative to the tall section) keeps the whole
-     image intact, anchored near the top where it sits before the copy. */
+  /* Mobile swaps in the same grid-texture background as the Graphic
+     Designs section (background.jpg + dark wash), with hands.png
+     layered on top near the screen's top edge — matching the reference
+     look. The copy (.contact-inner, z-index: 2) stays above both, so
+     it's always legible even where it overlaps the hands. */
   .contact-bg {
-    background-size: 100% auto;
-    background-position: top center;
-    background-repeat: no-repeat;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+      url("/assets/background.jpg");
+    background-size: cover;
+    background-position: center;
+    filter: brightness(1.15) saturate(1.05);
+  }
+
+  .contact-hands {
+    display: block;
   }
 }

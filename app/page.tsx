@@ -489,6 +489,7 @@ export default async function Home() {
 
       <section id="contact" className="contact" aria-label="Contact">
         <div className="contact-bg" aria-hidden="true" />
+        <div className="contact-hands" aria-hidden="true" />
 
         <div className="contact-inner">
           <p className="contact-copy">
