@@ -437,7 +437,7 @@
     left: -32%;
     top: 50%;
     width: 90%;
-    --rot: 74deg;
+    --rot: 70deg;
   }
   .obj--notebook {
     left: 58%;
@@ -445,9 +445,10 @@
     width: 60%;
   }
   .obj--sunglasses {
-    left: 0%;
+    left: -13%;
     top: 84%;
     width: 46%;
+    
   }
   .logo {
     width: 84%;
