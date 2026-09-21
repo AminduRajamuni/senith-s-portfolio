@@ -429,14 +429,15 @@
     width: 56%;
   }
   .obj--mic {
-    /* Bigger + rotated so the crop boundary (viewport edge + the
-       clip-path that isolates just the capsule on desktop) cuts along
-       the capsule's own diagonal instead of slicing straight across
-       it — that straight slice was the "cutout" artifact. */
+    /* Bigger + rotated 90deg clockwise from its desktop resting angle
+       so the crop boundary (viewport edge + the clip-path that
+       isolates just the capsule on desktop) cuts along the capsule's
+       own diagonal instead of slicing straight across it — that
+       straight slice was the "cutout" artifact. */
     left: -14%;
     top: 46%;
     width: 78%;
-    --rot: -16deg;
+    --rot: 74deg;
   }
   .obj--notebook {
     left: 58%;
@@ -445,7 +446,7 @@
   }
   .obj--sunglasses {
     left: 4%;
-    top: 90%;
+    top: 78%;
     width: 40%;
   }
   .logo {

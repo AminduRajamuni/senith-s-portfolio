@@ -77,8 +77,16 @@
 
 @media (max-width: 700px) {
   .graphics-title {
+    /* On mobile the card stack is horizontally centered, landing right
+       on top of the desktop position (vertically centered, left edge)
+       and hiding the title behind it — move the title above the stack
+       instead, just under the section's top edge. */
+    top: clamp(32px, 8vh, 72px);
+    left: 50%;
     max-width: 70vw;
     font-size: clamp(20px, 5vw, 28px);
+    text-align: center;
+    transform: translateX(-50%);
   }
 }
 
