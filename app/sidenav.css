@@ -111,6 +111,15 @@ button.side-nav-item:focus-visible {
 @media (max-width: 600px) {
   .side-nav {
     width: min(72vw, 240px);
+    /* Mobile Safari's address bar collapses on scroll-down, growing the
+       visual viewport — but 100svh is pinned to the SMALLEST viewport
+       size (bar shown) as a static reference, so this fixed-position
+       panel stayed sized to that smaller height while the actual screen
+       had more room below it, reading as "cut off" until scrolling back
+       up re-showed the bar. 100dvh tracks the current viewport live
+       instead, so the panel always fills the real visible height. */
+    height: 100vh;
+    height: 100dvh;
   }
 }
 
