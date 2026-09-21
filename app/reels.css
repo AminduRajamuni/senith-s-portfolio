@@ -119,9 +119,18 @@
 
 @media (max-width: 780px) {
   .reels-grid {
-    /* 2.5 tiles per view instead of 3.5 — redefining the variable here
+    /* 1.5 tiles per view instead of 3.5 — redefining the variable here
        (rather than overriding .reel-tile's flex-basis directly) keeps
-       the spacer's centering calc above in sync automatically. */
-    --reel-tile-w: calc((100% - 2 * var(--reel-gap)) / 2.5);
+       the spacer's centering calc above in sync automatically. Fewer
+       tiles per view means each one claims more of the viewport width,
+       which is what makes them read as "bigger" on phones. */
+    --reel-tile-w: calc((100% - 1 * var(--reel-gap)) / 1.5);
+  }
+}
+
+@media (max-width: 480px) {
+  .reels-grid {
+    /* Smaller phones: 1.2 tiles per view, bigger still. */
+    --reel-tile-w: calc((100% - 1 * var(--reel-gap)) / 1.2);
   }
 }
