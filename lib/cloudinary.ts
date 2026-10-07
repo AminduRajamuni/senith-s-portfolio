@@ -87,6 +87,7 @@ export type VideoSummary = {
   title: string;
   description: string;
   createdAt: string;
+  orientation: "portrait" | "landscape";
 };
 
 function readContext(raw: unknown): { title?: string; description?: string } {
@@ -115,10 +116,14 @@ export async function listVideos(folderName: string): Promise<VideoSummary[]> {
       secure_url: string;
       created_at: string;
       context?: unknown;
+      width?: number;
+      height?: number;
     };
     return (res.resources as Resource[])
       .map((r) => {
         const { title, description } = readContext(r.context);
+        const orientation: "portrait" | "landscape" =
+          r.width && r.height && r.width > r.height ? "landscape" : "portrait";
         return {
           publicId: r.public_id,
           url: r.secure_url,
@@ -131,6 +136,7 @@ export async function listVideos(folderName: string): Promise<VideoSummary[]> {
           title: title || "Untitled",
           description: description || "",
           createdAt: r.created_at,
+          orientation,
         };
       })
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));

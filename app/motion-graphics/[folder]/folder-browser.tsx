@@ -47,9 +47,19 @@ export default function FolderBrowser({
                 key={video.publicId}
                 onClick={() => setActiveIndex(i)}
               >
-                <span className="video-tile-thumb">
+                <span
+                  className={
+                    video.orientation === "landscape"
+                      ? "video-tile-thumb video-tile-thumb--landscape"
+                      : "video-tile-thumb"
+                  }
+                >
                   <img
-                    className="motion-folder-icon video-tile-icon"
+                    className={
+                      video.orientation === "landscape"
+                        ? "motion-folder-icon video-tile-icon video-tile-icon--landscape"
+                        : "motion-folder-icon video-tile-icon"
+                    }
                     src={video.thumbnailUrl}
                     alt=""
                     draggable={false}

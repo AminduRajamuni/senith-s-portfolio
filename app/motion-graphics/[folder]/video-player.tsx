@@ -121,8 +121,20 @@ export default function VideoPlayer({
         </button>
       ) : null}
 
-      <div className="player-stage">
-        <div className="player-video-wrap">
+      <div
+        className={
+          video.orientation === "landscape"
+            ? "player-stage player-stage--landscape"
+            : "player-stage"
+        }
+      >
+        <div
+          className={
+            video.orientation === "landscape"
+              ? "player-video-wrap player-video-wrap--landscape"
+              : "player-video-wrap"
+          }
+        >
           <video
             ref={videoRef}
             className="player-video"

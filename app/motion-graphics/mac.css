@@ -172,6 +172,11 @@
   object-fit: cover;
   filter: none;
 }
+/* Landscape source videos get a 16:9 thumbnail frame instead of being
+   squeezed into the portrait box above. */
+.video-tile-icon--landscape {
+  aspect-ratio: 16 / 9;
+}
 .video-tile-play {
   position: absolute;
   inset: 0;
@@ -294,6 +299,28 @@
   cursor: pointer;
 }
 
+/* Landscape videos are sized from width, not height — a 16:9 clip stacked
+   above its title/description instead of squeezed into the tall 9:16 box
+   used for portrait reels. */
+.player-stage--landscape {
+  flex-direction: column;
+  justify-content: center;
+  max-width: min(94vw, 960px);
+}
+
+.player-video-wrap--landscape {
+  flex: 0 1 auto;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  aspect-ratio: 16 / 9;
+}
+
+.player-stage--landscape .player-details {
+  max-width: 100%;
+  flex: 0 0 auto;
+}
+
 .player-controls {
   position: absolute;
   left: 0;
@@ -396,6 +423,11 @@
     height: auto;
     width: min(100%, 360px);
     max-height: 62svh;
+  }
+  .player-video-wrap--landscape {
+    width: 100%;
+    max-width: 100%;
+    max-height: 40svh;
   }
   .player-details {
     max-width: 100%;
